@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load markdown %}
+{% block title %} Labs :: RESTful Database {% endblock %}
+{% block content %}{% markdown %}
+
+<div class="notification">
+    This article is a draft.
+</div>
+
+RESTful Database
+=================
+
+RESTful Database is one of the most important projects for us. One
+reason why some of our services are currently unavailable is because
+we haven't decided where to put all of our data. Our labs are
+currently hosted by the [Google App
+Engine](http://code.google.com/appengine), and we came to a conclusion
+that it is not economically viable for us to store all of our data on
+Google's servers. It costs $0.005[^1] per Gigabyte per day to store our data on Google's servers.
+We have over 150GB of data in our database and it is still growing, so
+it would cost us over $400 per year at the current pace of
+growth. Yes, we know it doesn't sound like a big deal, but we have
+*very* limited funding. The head of our labs, [Sumin Byeon](http://blog.sumin.us), recently graduated from a college and is still making monthly car payments[^budget].
+
+So, we decided to host our data in a separate server outside the Google App Engine environment.
+Then we ran into another road block.
+The Google App Engine does not allow any raw socket communication, 
+which means we cannot make a stateful connection from our labs to our database server residing outside the Google App Engine environment.
+However, it is possible to make an HTTP/HTTPS connection using [URL Fetch APIs](http://code.google.com/appengine/docs/python/urlfetch/overview.html),
+and that's what led us to the idea of designing a RESTful database interface for our needs.
+
+<!--
+One of our projects [Rainbow Table](/rainbowtable) will be able to
+make a good use of this database. It primarily performs simple
+retrival operaions with primary keys, and it has a very large amount of data.
+-->
+
+Introduction
+-------------
+RESTful database is not a database management system. It is rather an abstraction layer sitting on the top of a database that allows RESTful communication between database servers and clients.
+
+
+
+Representational State Transfer
+--------------------------------
+[Representational State Transfer (REST)](http://en.wikipedia.org/wiki/Representational_State_Transfer) is a software architectural style for distributed hypermedia such as the World Wide Web.
+The term Representational State Transfer was introduced and defined in 2000 by [Roy Fielding](http://en.wikipedia.org/wiki/Roy_Fielding) in his doctoral dissertation.[^rest]
+The basic concept of REST is fairly simple. There are clients and servers. Clients initiate requests to servers, and servers return appropriate responses.
+When a server returns a response, then the connection is terminated. 
+
+REST was initially described in the context of [Hypertext Transfer Protocol (HTTP)](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol),
+but can be also based on other Application Layer protocols if they already provide a rich and uniform vocabulary for applications based on the transfer of meaningful representational state.
+ 
+Design
+-------
+
+The design principle is
+
+1. to be able to retrieve resources from servers in different networks with low latency,
+2. to be linearly scalable,
+3. and not to have a single point of failure
+
+which is partially inspired by Google's [Bigtable](http://labs.google.com/papers/bigtable.html).
+Thus, unfortunately, there is no `JOIN` statement nor any other fancy features that you would normally expect from traditional relational database systems such as MySQL, PostgreSQL or Oracle.
+Also, queries that take a long time to execute are not desirable.
+
+Our current implementation plan is to use HTTP for the interface and to use traditional relational database as underlying database systems. 
+However, non-relational database systems, such as HBase or CouchDB,
+may also be used. Moreover, there is no need to use the same underlying database systems for each server. 
+
+<!--
+Properties
+-----------
+
+There are a number of properties that need to be discusses.
+
+### Stateless = Simplicity ###
+
+Servers are not required to keep a stateful connection to its clients.
+
+If one of the servers in the pool becomes unavailable then a replica replaces the server. This appears seamless to clients because it is a natural behavior for clients to connect to a different server every time they send a request.
+
+### High Availability ###
+
+
+
+### Abstraction ###
+
+Any type of database engine can be used as an underlying database engine.
+
+### Linear Scalability ###
+
+Scalability is very important especially when it comes to modern web applications deployed globally. 
+
+RESTful database solves this problem by adding more machines in its pool. The capacity of the pool is nearly directly proportional to sum of the capacity of each machine in the pool.
+
+### Not suitable for analytic tasks
+
+### Cannot take a full advantage of whatever underlying database system has to offer
+-->
+
+
+
+Table Schema
+-------------
+In RESTful Database, unlike traditional relational databases, table
+schema is not enforced by database. It is a sole responsibility of
+each application that uses RESTful database to ensure that tables that
+they interact with are in a right format. RESTful Database may be used
+as a schemelss database. One may think of RESTful Database as a giant hashtable
+across multiple machines.
+
+<!--
+For example, suppose we have a record for a blog post.
+
+    {"81dc9bdb52d04dc20036dbd8313ed055":{
+        "author":"7250eb93b3c18cc9daa29cf58af7a004",
+        "title":"Untitled Post",
+        "content":"This is a blog post"}
+    }
+-->
+
+Interface
+----------
+This section describes the interface for requests and responses.
+There are currently a limited number of supported operations, but there is a high possibility of supported operations to be added in the future.
+
+### Retrieving a single entry with the primary key ###
+
+    GET /${table name}/${key}
+    
+#### Example ####
+    
+Suppose we want to get a single blog post entry where `post` is the name of the table and `1234` is the primary key of the blog post in the table.
+
+    GET /post/81dc9bdb52d04dc20036dbd8313ed055
+    Host: restfuldb.sumin.us
+
+Then the response would be
+
+    HTTP/1.1 200 OK
+    Date: 12 Aug 2010 16:56:19 GMT
+    Server: Apache/2.2
+    Content-Type: application/json; charset=UTF-8
+    
+    {"key":"81dc9bdb52d04dc20036dbd8313ed055",
+     "author":"7250eb93b3c18cc9daa29cf58af7a004",
+     "title":"Untitled Post",
+     "content":"This is a blog post"}
+
+### Retrieving entries with key-value pairs
+
+    GET /${table name}/${column name}:${value}([,+]${column name}:${value})*
+
+* `,`: `AND` operator
+* `+`: `OR` operator
+
+#### Example
+
+    GET /post/author:832,title:"RESTful Database"
+    Host: restfuldb.sumin.us
+
+### Creating a new entry
+
+    POST /${table name}
+    Host: restfuldb.sumin.us
+
+Users can insert a new entry with key-value pairs.
+
+    key_1=value_1&key_2=value_2&...&key_n=value_n
+
+Values must be represented as strings except for the columns of binary
+data type. For example, a column `price` with floating number type can
+be represented as following.
+
+    price=149.95
+
+However, due to the nature of the HTTP request body, column names
+and values must be property encoded.
+
+For binary types, the value is represented in
+[base64](http://en.wikipedia.org/wiki/Base64) format. For example,
+
+    image=iVBORw0KGgoAAAANSUhEUgAABAAAAANkCAIAAACmvc8WAAAABGdBTUEAAJxAIA3k...
+
+#### Example
+
+    POST /post
+    Host: restfuldb.sumin.us
+
+### Editing an existing entry
+
+    PUT /${table name}/${key}
+
+The request body resembles 
+
+#### Example
+
+    PUT /post/81dc9bdb52d04dc20036dbd8313ed055
+    Host: restfuldb.sumin.us
+
+### Deleting a single entry
+
+    DELETE /${table name}/${key}
+
+### Deleting multiple entries with contrains
+
+    DELETE /${table name}/${query}
+
+#### Example
+
+    DELETE /post/81dc9bdb52d04dc20036dbd8313ed055
+    Host: restfuldb.sumin.us
+
+
+    HTTP/1.1 200 OK
+    Date:
+    Server:
+
+Resource Distribution
+----------------------
+The basic idea of how resources get distributed across multiple servers is similar to a [hashtable](http://en.wikipedia.org/wiki/Hash_table). Let `h` to be a function that takes a tuple that is going to go into the database and the bucket size (the number of servers), and returns a bucket number.
+
+    b = h(r, n)
+    
+where `b` is the bucket number, `r` is the tuple, and `n` is the bucket size.
+
+However, adding a new server can be a costly operation as some resources need to be relocated. Details of design and implementation for resource reallocation are currently undecided.
+
+Security Concerns
+------------------
+Since HTTP is not a stateful protocol, every single request must be authenticated independently. Although this problem can be easily solved by introducing a session ID, additional protections may be required because it is possible to intercept plain text HTTP packets between the client and the server. Using HTTPS instead of HTTP will solve the problem.
+
+Additionally, it may be helpful to enable IP-based access control lists to prevent any request from unauthorized clients.
+
+
+Future Plans
+-------------
+* To support multiple presentation formats such as XML, CSV, and more.
+* To add more auxiliary functions.
+
+*Updated on Oct 27, 2010*
+
+[^1]: In U.S. dollars.
+[^budget]: As of August 2010.
+[^rest]: http://en.wikipedia.org/wiki/Representational_State_Transfer
+[^2]: http://evolt.org/node/23896
+
+{% endmarkdown %}{% endblock %}

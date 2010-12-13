@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: How Old Am I? {% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript">
+	</script>
+{% endblock %}
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="/static/howoldami/common.css" />
+{% endblock %}
+{% block content %}
+    <h1>{{person.name}}</h1>
+
+    {% if person.description %}
+        <p>{{person.description}}</p>
+    {% endif %}
+    
+    <h3>Date of Birth</h3>
+    {{person.birthdate}}
+    
+    {% if person.deathdate %}
+        <h3>Date of Death</h3>
+        {{person.deathdate}}
+    {% endif %}
+    
+    {% if person.images %}
+    	<h3>Images</h3>
+    	{% for image in person.images %}
+    		<img src="http://webthumb.lunant.net/thumbnail?url={{image}}&amp;size=128" alt="{{person.name}}"/>
+    	{% endfor %}
+    {% endif %}
+    
+    
+    {% if person.links %}
+    	<h3>Links</h3>
+    	{% for link in person.links %}
+    		<a href="{{link}}"><img src="http://webthumb.lunant.net/thumbnail?url={{link}}&amp;size=128" alt="{{link}}"/></a>
+    	{% endfor %}
+    {% endif %}
+    
+{% endblock %}

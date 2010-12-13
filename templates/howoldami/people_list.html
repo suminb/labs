@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: How Old Am I? {% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript" src="/static/jquery.printf.js"></script>
+	<script type="text/javascript" src="/static/jquery.urlize.js"></script>
+	<script type="text/javascript">
+	var page = {{page}};
+	
+	function populate(people) {
+        var list = $('#people-list');
+        
+        list.children().remove();
+       
+        $.each(people, function(index, value) {
+            var item = $('<li>');
+            item.append($('<img>').attr('src', 'http://webthumb.lunant.net/thumbnail?url='+value.images[0]+'&amp;size=64'));
+            item.append($('<div>').addClass('metadata').append(
+                $('<h3>').append(value.name).append($.sprintf('<a href="/howoldami/person/edit/%s" class="edit">Edit</a>', value.key))
+            ).append(
+                $('<p>').addClass('description').append(value.description ? value.description.substring(0, 80) : $('<span>').append('No description'))
+            ).append(
+                $('<p>').addClass('links').append(value.links[0]).urlize(''))
+            );
+
+            list.append(item);
+        });
+	}
+	
+	function navigate(page) {
+        $.get('/howoldami/people/list?mimetype=application/json&page='+page, null, function(response) {
+            if(response.status == 'ok') {
+                populate(response.payload);
+            }
+            else {
+                alert(response.message);
+            }
+        }, 'json');
+	}
+	
+	function prev() {
+	    if(page > 0) {
+	        navigate(--page);
+	        location.href = '#page-'+page;
+	    }  
+	}
+	
+	function next() {
+	    navigate(++page);
+	    location.href = '#page-'+page
+	}
+	
+	//window.onload = function() {
+    //    navigate(page);
+	//}
+	</script>
+{% endblock %}
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="/static/howoldami/common.css" />
+{% endblock %}
+{% block content %}
+    <h1>List of People</h1>
+    
+    <ul id="people-list">
+    {% for person in people %}
+        <li>
+            {% if person.images %}
+            <a href="/howoldami/person/view/{{person.key}}">
+            <img src="http://webthumb.lunant.net/thumbnail?url={{person.images.0}}&amp;size=64" alt="{{person.name}}"/>
+            </a>
+            {% endif %}
+            <div class="metadata">
+                <h3 class="name">{{person.name}}
+                    <a href="/howoldami/person/edit/{{person.key}}" style="font-weight:normal;font-size:10pt;">Edit</a>
+                </h3>
+                <p class="description">{{person.description|default:'<span>No description</span>'|slice:':100'}}</p>
+                {% if person.links %}
+                    <p class="links">{{person.links|first|urlize}}</a>
+                {% endif %}
+            </div>
+            <div class="clear"></div>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <div id="navigation-menu">
+        <a href="?page={{page|add:-1}}">Prev</a>
+        <a href="?page={{page|add:1}}">Next</a>
+        <a href="/howoldami/person/add">Add</a>
+    </div>
+
+{{ debug }}
+{% endblock %}

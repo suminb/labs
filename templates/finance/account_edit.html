@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Finance {% endblock %}
+
+{% block content %}
+
+<h1>Account</h1>
+
+<form method="post">
+{{ form.as_ul }}
+<a href="/finance">Go back</a>
+<input type="submit" value="Submit" />
+</form>
+    
+{% endblock %}

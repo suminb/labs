@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Minesweeper {% endblock %}
+{% block stylesheet %}
+	<style type="text/css">
+	#content {
+		height: 400px;
+	}
+	#board {
+		position: absolute;
+	}
+	.tile {
+		position: absolute;
+		width: 24px;
+		height: 24px;
+		border: 1px solid #CCC;
+	}
+	</style>
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript" src="/static/jquery.printf.js"></script>
+	<script type="text/javascript">
+	function map(f, xs) {
+		var rs = new Array(xs.length);
+		for(var i=0; i<xs.length; i++) rs[i] = f(xs[i]);
+		return rs;
+	}
+	
+	function shuffle(o){
+		for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+		return o;
+	}
+	
+	function generateMines(width, height, numberOfMines) {
+		var n = 0;
+		var mines = new Array(height);
+		for(var i=0; i<height; i++) {
+			mines[i] = new Array(width);
+		}
+		
+		var n = 0;
+		while(n < numberOfMines) {
+			var i = parseInt(Math.random() * height);
+			var j = parseInt(Math.random() * width);
+			
+			if(!mines[i][j]) {
+				mines[i][j] = 1;
+				n++;
+			}
+		}
+		
+		return mines;
+	}
+	
+	function countMines(mines, width, height) {
+		var counts = new Array(height);
+		for(var i=0; i<height; i++) {
+			counts[i] = new Array(width);
+			for(var j=0; j<width; j++) {
+				counts[i][j] = 0;
+			}
+		}
+		
+		inBounds = function(i, j, w, h) {
+			return i >= 0 && i < width && j >= 0 && j < height;
+		}
+		
+		for(var i=0; i<height; i++) {
+			for(var j=0; j<width; j++) {
+				if(mines[i][j]) {
+					if(inBounds(i-1, j-1)) counts[i-1][j-1]++;
+					if(inBounds(i-1, j)) counts[i-1][j]++;
+					if(inBounds(i-1, j+1)) counts[i-1][j+1]++;
+					if(inBounds(i, j-1)) counts[i][j-1]++;
+					//if(inBounds(i, j)) counts[i][j]++;
+					if(inBounds(i, j+1)) counts[i][j+1]++;
+					if(inBounds(i+1, j-1)) counts[i+1][j-1]++;
+					if(inBounds(i+1, j)) counts[i+1][j]++;
+					if(inBounds(i+1, j+1)) counts[i+1][j+1]++;
+				}
+			}
+		}
+		
+		return counts;
+	}
+	
+	function init(width, height, numberOfMines) {
+		var board = $('#board');
+		var mines = generateMines(width, height, numberOfMines);
+		var counts = countMines(mines, width, height);
+		for(var i=0; i<height; i++) {
+			for(var j=0; j<width; j++) {
+				var mine = $.sprintf('%d %s', counts[i][j], mines[i][j] ? '*':'');
+				board.append($.sprintf('<div class="tile" style="left:%dpx; top:%dpx;">%s</div>', j*24, i*24, mine));
+			}
+		}
+	}
+	
+	window.onload = function() {
+		init(10, 10, 15);
+	}
+	</script>
+{% endblock %}
+
+{% block content %}
+<div id="board"></div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Cognitive Research {% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript" src="/static/jquery.printf.js"></script>
+	<script type="text/javascript">
+		var timer = null;
+
+		function stop() {
+			clearInterval(timer);
+		}
+
+		function reset() {
+			$.post('/cognitive/reset', {}, function(json) {
+				location.reload();
+			});
+		}
+		
+		function move(context, x, y) {
+			// visible range
+			context.fillStyle = "#EFE8E4";
+			context.beginPath();
+			context.arc(x, y, 80, 0, Math.PI*2, true);
+			context.closePath();
+			context.fill();
+
+			// Create the yellow face
+			//context.strokeStyle = "#000000";
+			context.fillStyle = "#FFCC33";
+			context.beginPath();
+			context.arc(x, y, 16, 0, Math.PI*2, true);
+			context.closePath();
+			//context.stroke();
+			context.fill();
+		}
+
+		function drawObject(context, x, y, shape, color) {
+			context.fillStyle = "#CCCCCC";
+			context.beginPath();
+			context.arc(x, y, 16, 0, Math.PI*2, true);
+			context.closePath();
+			context.fill();
+		}
+
+		function tick(context) {
+			var x, y;
+			
+		    $.post('/cognitive/tick', {'x':x, 'y':y}, function(json) {
+		    	if(json.status == 'ok') {
+		    		// our(?) universe
+		        	var universe = json.payload.universe;
+
+		        	// the observer(!)
+		        	var observer = universe.observer;
+
+		        	var console = $('#console');
+			        console.text('');
+		        	console.append($.sprintf('Action = %s (%d)\n', observer.action, observer.action_count));
+		        			        	
+			        // inefficient so must be fixed in near future
+		        	context.clearRect(0, 0, 800, 200);
+
+		        	x = observer.location[0];
+		        	y = observer.location[1];
+		        	
+					move(context, x, y);
+					
+					for(var i in observer.objects) {
+						var object = observer.objects[i];
+
+						drawObject(context, object.location[0], object.location[1], null, null);
+						
+						console.append($.sprintf('Object %d\n', i));
+						console.append($.sprintf('  location = (%s)\n', object.location));
+						if(object.shape)
+							console.append($.sprintf('  shape = %s\n', object.shape));
+						if(object.color)
+							console.append($.sprintf('  color = #%02X%02X%02X\n', object.color[0], object.color[1], object.color[2]));
+					}
+
+		        	if(observer.action == 'done') {
+			        	clearInterval(timer);
+			        	return;
+		        	}
+		        }
+		        else {
+		        	//result.text(json.message);
+		        }
+		    }, "json");
+		}
+		
+		window.onload = function() {
+			//var canvas = $('#universe');
+			var canvas = document.getElementById('universe');
+			if(canvas.getContext) {
+				var context = canvas.getContext('2d');
+				
+				tick(context);
+				timer = setInterval(tick, 1000, context);
+			}
+		}
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="align-center">
+		<canvas id="universe" width="800" height="200">
+			<p style="font-size:3em">Don't be a caveman.</p>
+		</canvas>
+	</div>
+	<div id="control-panel">
+		<a href="#" onclick="stop()">Stop</a>
+		<a href="#" onclick="reset()">Reset</a>
+	</div>
+	<div id="console" class="code" style="white-space:pre-wrap;"></div>
+{% endblock %}

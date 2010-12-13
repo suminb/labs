@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>Recently Added</h1>
+	
+	<table>
+	<thead>
+		<tr>
+			<th>Plain</th>
+			<th>MD5</th>
+			<th>SHA1</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for row in rows %}
+		<tr>
+			<td>{{ row.plain }}</td>
+			<td>{{ row.md5 }}</td>
+			<td>{{ row.sha1 }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+{% endblock %}

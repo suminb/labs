@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Maps {% endblock %}
+
+{% block stylesheet %}
+<style type="text/css">
+div#content img {
+    margin: 10px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Maps</h1>
+
+<p>In November 2009, we started collecting map tiles from various sources such as <a href="http://www.openstreetmap.org">Open Street Map</a>. A map tile is a small image, 256 by 256 pixels, that constitutes a map view. As of August 2010, we've collected more than 21 million tiles including maps, satellite imageries, and terrain. Even though 21 million is a <em>very</em> large number, it only covers a tiny fraction of the globe. We're talking 0.005% or less by a rough estimation.</p>
+
+<p>We would like to open up this section, but our concern regarding the terms of services of each map imagery provider still remains. So, this section will be kept private until further notice.</p>
+
+<div class="align-center">
+    <img src="/static/images/maps_satellite.png" alt=""/>
+    <img src="/static/images/maps_regular.png" alt=""/>
+</div>
+{% endblock %}

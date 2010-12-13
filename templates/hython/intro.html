@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load markdown %}
+{% block title %} Labs :: Hython {% endblock %}
+
+{% block content %}{% markdown %}
+
+<div class="notification">
+    This article is a draft.
+</div>
+
+Haskell + Python = Hython
+==========================
+
+Cody Jorgensen and I really enjoyed the computer science course we took together in the Fall of 2009[^cs372].
+During the semester, we were able to explore all the fine features that Haskell had to offer such as pattern matching, currying, and lazy evaluation.
+So I though it would be nice to bring some of these features to the Python world, which is another language we like to use in daily basis.
+
+Pattern Matching
+-----------------
+
+Consider the following code to calculate the *n*-th element in the Fibonacci sequence.
+
+    def f(x):
+        if x in (0, 1):
+            return x
+        else:
+            return f(x-2) + f(x-1)
+
+With pattern matching, it is possible to write the same logic in a more concise and robust way.
+
+    def f(0):
+        return 0
+    def f(1):
+        return 1
+    def f(x):
+        return f(x-2) + f(x-1)
+    
+    
+    def f(x:xs):
+        return x + f(xs)
+
+Currying
+---------
+
+Currying is the technique of transforming a function that takes multiple arguments (or an n-tuple of arguments) in such a way that it can be called as a chain of functions each with a single argument.[^currying]
+Jorgensen suggested to do currying in Python in the following way.
+
+Consider the following function `f`.
+
+    def f(n, m):
+        return n + m
+
+The the following code gets evaluated to be `3`, obviously.
+
+    f(1, 2)
+
+Now, we would like to *transform* the function `f` so that it takes only one argument, instead of two, by *currying* it.
+
+    def f(n):
+        def g(m):
+            return m + n
+        return g
+
+Then we should be able to generate a *specialized* function with a partially pre-assigned argument. 
+
+    a = f(1)
+
+At this point, the instance `a` is a function, which maybe be called as following.
+
+    a(2)
+    
+Then the result shall be `3`.
+
+It is possible to have an arbitrary number of arguments.
+
+    def f(n):
+        def g(m):
+            def h(s):
+                return m + n + s
+            return h    
+        return g
+        
+### Limitations
+
+A function must have exactly one statement within it.
+
+        
+Implementation
+---------------
+
+All these features are not a part of the standard Python specification, which means a compiler is necessary to translate those extended grammars into either an intermediate Python code (i.e. a `.pyc` file) or a standard Python code. 
+
+[^cs372]: http://www.cs.arizona.edu/~collberg/Teaching/372/2009
+[^currying]: http://en.wikipedia.org/wiki/Currying
+    
+{% endmarkdown %}{% endblock %}

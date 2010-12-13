@@ -1,0 +1,288 @@
+<html>
+<head>
+<style type="text/css">
+body {
+	font-family: sans-serif;
+	font-size: 9pt;
+}
+#control {
+	position: fixed;
+	z-index: 100;
+}
+#control a {
+	position: absolute;
+	display: block;
+	width: 40px;
+	text-align: center;
+	color: red;
+}
+#control-left { top: 20px; left: 0px; }
+#control-right { top: 20px; left: 50px; }
+#control-up { top: 0px; left: 25px; }
+#control-down { top: 40px; left: 25px; }
+#control-in { top: 70px; left: 0px; }
+#control-out { top: 90px; left: 0px; }
+#control-scan { top: 0px; left: 90px; }
+#control-random { top: 0px; left: 140px; }
+
+#debug {
+	position: absolute;
+	z-index: 100;
+	right: 0;
+}
+
+#map {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: #DDD;
+}
+
+#map-pane {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#map img.tile {
+	position: absolute;
+	border: 0;
+	width: 256px;
+	height: 256px;
+}
+</style>
+
+<script type="text/javascript" src="/static/jquery.js"></script>
+<script type="text/javascript" src="/static/jquery.printf.js"></script>
+<script type="text/javascript">
+var map = {
+	x: {{x}},
+	y: {{y}},
+	z: {{z}},
+	type: '{{type}}',
+	left: function() {
+		this.x -= 1;
+		// since Javascript's mod operator doesn't work as expected with a negative integer,
+		// we're doing it this way.
+		if(this.x < 0) this.x += Math.pow(2, this.z);
+	},
+	right: function() {
+		this.x = (this.x + 1) % Math.pow(2, this.z);
+	},
+	up: function() {
+		this.y -= 1;
+		if(this.y < 0) this.y += Math.pow(2, this.z);
+	},
+	down: function() {
+		this.y = (this.y + 1) % Math.pow(2, this.z);
+	}
+}
+
+function getWindowSize() {
+	var pane = $('#map-pane');
+	return {width:Math.ceil(pane.width()/256), height:Math.ceil(pane.height()/256)};
+}
+
+function getTile(x, y) {
+	var offset = {x: x-map.x, y: y-map.y};
+	var tile = $($.sprintf('<img id="tile-%d-%d-%d" src="/maps/image/%d-%d-%d/%s"/>',
+			x, y, map.z, x, y, map.z, map.type))
+		.addClass('tile')
+		.offset({left:offset.x*256, top:offset.y*256});
+	
+	return tile;
+}
+
+function removeInvisibleTiles() {
+	var pane = $('#map-pane');
+	pane.children().map(function() {
+		var tile = $(this);
+		if(!isVisibleTile(tile, pane)) {
+			tile.remove();
+		}
+	});
+}
+
+function isVisibleTile(tile, pane) {
+	var offset = tile.offset();
+	return !(offset.left < 0 || offset.left > pane.width() || offset.top < 0 || offset.top > pane.height());
+}
+
+function left() {
+	map.left();
+	var pane = $('#map-pane');
+	pane.children().map(function() {
+		var tile = $(this);
+		tile.offset({left:tile.offset().left+256});
+		
+		// TODO: needs to eliminate invisible elements
+	});
+	
+	// getting tiles to fill up empty area
+	var ws = getWindowSize();
+	for(var i=0; i<ws.height; i++) {
+		pane.append(getTile(map.x, map.y+i));
+	}
+	removeInvisibleTiles();
+	resetScanCount();
+	updateDebugLabel();
+}
+function right() {
+	map.right();
+	var pane = $('#map-pane');
+	pane.children().map(function() {
+		var tile = $(this);
+		tile.offset({left:tile.offset().left-256});
+		
+		// TODO: needs to eliminate invisible elements
+	});
+	
+	// getting tiles to fill up empty area
+	var ws = getWindowSize();
+	for(var i=0; i<ws.height; i++) {
+		pane.append(getTile(map.x+(ws.width-1), map.y+i));
+	}
+	removeInvisibleTiles();
+	resetScanCount();
+	updateDebugLabel();
+}
+function up() {
+	map.up();
+	var pane = $('#map-pane');
+	pane.children().map(function() {
+		var tile = $(this);
+		tile.offset({top:tile.offset().top+256});
+		
+		// TODO: needs to eliminate invisible elements
+	});
+	
+	// getting tiles to fill up empty area
+	var ws = getWindowSize();
+	for(var j=0; j<ws.width; j++) {
+		pane.append(getTile(map.x+j, map.y));
+	}
+	removeInvisibleTiles();
+	resetScanCount();
+	updateDebugLabel();
+}
+function down() {
+	map.down();
+	var pane = $('#map-pane');
+	pane.children().map(function() {
+		var tile = $(this);
+		tile.offset({top:tile.offset().top-256});
+		
+		// TODO: needs to eliminate invisible elements
+	});
+	
+	// getting tiles to fill up empty area
+	var ws = getWindowSize();
+	for(var j=0; j<ws.width; j++) {
+		pane.append(getTile(map.x+j, map.y+(ws.height-1)));
+	}
+	removeInvisibleTiles();
+	resetScanCount();
+	updateDebugLabel();
+}
+function zoomin() {
+    var ws = getWindowSize();
+	location.href = $.sprintf('/maps/view/%d-%d-%d/%s', map.x*2+ws.width/2, map.y*2+ws.height/2, map.z+1, map.type);
+}
+function zoomout() {
+	location.href = $.sprintf('/maps/view/%d-%d-%d/%s', parseInt(map.x/2), parseInt(map.y/2), map.z-1, map.type);
+}
+function scan() {
+	var ws = getWindowSize();
+	var pane = $('#map-pane');
+	var scanCount = 0;
+	var scanTotal = (ws.width+2)*(ws.height+2);
+
+	updateScanCount(0, scanTotal);
+						
+	for(var i=-1; i<ws.height+1; i++) {
+		for(var j=-1; j<ws.width+1; j++) {
+			$.get($.sprintf('/maps/scan/%d-%d-%d/%s', map.x+j, map.y+i, map.z, map.type),
+				function(data) {
+					var r = data.results;
+					
+					scanCount += 1;
+					updateScanCount(scanCount, scanTotal);
+
+					var timestamp = new Date().getTime();
+					$($.sprintf('#tile-%d-%d-%d', r.x, r.y, r.z)).attr('src',
+						$.sprintf('/maps/image/%d-%d-%d/%s?%s', r.x, r.y, r.z, map.type, timestamp)
+					);
+				}, 'json');
+		}
+	}
+	removeInvisibleTiles();
+}
+
+function resetScanCount() {
+	$('#control-scan').text('Scan');
+}
+
+function updateScanCount(n, m) {
+	$('#control-scan').text($.sprintf('Scan %d/%d', n, m));
+}
+
+function updateDebugLabel() {
+	var coordinate = $.sprintf('%d-%d-%d', map.x, map.y, map.z);
+	$('#debug').html($.sprintf('<a href="/maps/view/%s/%s">%s</a>', coordinate, map.type, coordinate));
+}
+
+function jumpToRandomSpot() {
+	//map.z = Math.floor(Math.random()*8) + 10;
+	map.x = map.x + Math.floor(Math.random()*map.z*10) - map.z*5;
+	map.y = map.y + Math.floor(Math.random()*map.z*10) - map.z*5;
+	
+	var ws = getWindowSize();
+	
+	map.x += (Math.random()*2-1) * ws.width * map.z;
+	map.y += (Math.random()*2-1) * ws.height * map.z;	
+	
+	var pane = $('#map-pane');
+	pane.children().remove();
+	for(i=0; i<ws.height; i++) {
+		for(j=0; j<ws.width; j++) {
+			pane.append(getTile(map.x+j, map.y+i));
+		}
+	}
+	removeInvisibleTiles();
+	resetScanCount();
+	updateDebugLabel();
+}
+
+function init() {
+	var ws = getWindowSize();
+	var pane = $('#map-pane');
+	for(i=0; i<ws.height; i++) {
+		for(j=0; j<ws.width; j++) {
+			pane.append(getTile(map.x+j, map.y+i));
+		}
+	}
+	
+	updateDebugLabel();
+}
+</script>
+</head>
+<body onload="init()">
+
+<div id="map">
+	<div id="control">
+		<a id="control-left" href="#" onclick="left()">Left</a>
+		<a id="control-up" href="#" onclick="up()">Up</a>
+		<a id="control-down" href="#" onclick="down()">Down</a>
+		<a id="control-right" href="#" onclick="right()">Right</a>
+		<a id="control-in" href="#" onclick="zoomin()">In</a>
+		<a id="control-out" href="#" onclick="zoomout()">Out</a>
+		<a id="control-scan" href="#" onclick="scan()">Scan</a>
+		<a id="control-random" href="#" onclick="jumpToRandomSpot()">Random</a>
+	</div>
+	<div id="map-pane"></div>
+	<div id="debug"></div>
+</div>
+
+</body>
+</html>

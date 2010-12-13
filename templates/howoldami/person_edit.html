@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: How Old Am I? {% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript">
+	</script>
+{% endblock %}
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="/static/howoldami/common.css" />
+	<link rel="stylesheet" type="text/css" href="/static/howoldami/edit.css" />
+{% endblock %}
+{% block content %}
+    <h1>{{ person.name }}</h1>
+
+    <form method="post">
+    {{ form.as_ul }}
+    <a href="/howoldami/people/list">Go back to list</a>
+    <input type="submit" value="Submit" />
+    </form>
+
+
+{{ debug }}
+{% endblock %}

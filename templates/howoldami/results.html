@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: How Old Am I? {% endblock %}
+{% block metatags %}
+    <meta property="og:title" content="{{name}} is as old as..."/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:image" content="http://webthumb.lunant.net/thumbnail?url={{person.images|first}}&amp;size=64"/>
+    <!--<meta property="og:url" content="http://labs.sumin.us/howoldami/result?name={{name}}&amp;birthdate={{birthdate}}"/>-->
+    <meta property="og:site_name" content="Sumin's Labs"/>
+    <meta property="fb:app_id" content="us.sumin.labs.howoldami"/>
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/jquery.js"></script>
+	<script type="text/javascript" src="http://static.ak.fbcdn.net/connect.php/js/FB.Share"></script>
+{% endblock %}
+{% block stylesheet %}
+	<link rel="stylesheet" type="text/css" href="/static/howoldami/common.css" />
+{% endblock %}
+{% block content %}
+<h1>{{name}} <span>is as old as...</span></h1>
+
+{% if not people %}
+    No one. I guess you're either too old or too young.
+{% else %}
+    <ul>
+    {% for person in people %}
+        <li>
+            {% if person.images %}
+            <a href="/howoldami/person/view/{{person.key}}">
+            <img src="http://webthumb.lunant.net/thumbnail?url={{person.images.0}}&amp;size=64" alt="{{person.name}}"/>
+            </a>
+            {% endif %}
+            <div class="metadata">
+                <h3 class="name">{{person.name}}</h3>
+                <p class="description">{{person.description|default:'<span>No description</span>'|slice:':100'}}</p>
+                {% if person.links %}
+                    <p class="links">{{person.links|first|urlize}}</a>
+                {% endif %}
+            </div>
+            <div class="clear"></div>
+        </li>
+    {% endfor %}
+    </ul>
+    
+    <p>
+        <a name="fb_share" type="button" href="http://www.facebook.com/sharer.php">Share</a>
+    </p>
+    
+{% endif %}
+
+{{ debug }}
+{% endblock %}

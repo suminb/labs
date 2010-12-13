@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Vehicle Compatibility Test {% endblock %}
+
+{% block content %}
+
+<h2>{{question.question}}</h2>
+
+{% for choice in choices %}
+    <div>
+        <img src="{{choice.image}}" alt=""/>
+    </div>
+{% endfor %}
+
+{% endblock %}

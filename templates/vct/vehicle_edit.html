@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Add/Edit a Vehicle {% endblock %}
+
+{% block content %}
+
+<h1>Add/Edit a Vehicle</h1>
+
+<form method="post">
+{{ form.as_ul }}
+<a href="/vct/vehicle/list">Go back</a>
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

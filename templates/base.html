@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="google-site-verification" content="ey-TqW9KY7eR3mLOQxmswQvDpM95TKTORQql1jqsGpw" />
+{% block metatags %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    
+    <link rel="stylesheet" type="text/css" href="/static/style.css" />
+{% block stylesheet %}{% endblock %}
+{% block javascript %}{% endblock %}
+</head>
+
+<body>
+<div id="container">
+    <div id="menu">
+        <a href="/" class="menuitem">Lobby</a>
+        <a href="/training" class="menuitem">Rec Center</a>
+        <a href="/sector7" class="menuitem">Sector 7</a>
+        <!--<a href="/sponsors" class="menuitem">Sponsors</a>-->
+        {% if user %}<a id="id_menuitem_logout" href="{{logout_url}}" class="menuitem">Sign Out</a>{% endif %}
+    </div>
+    <div id="content">
+    <!--
+    <div id="notification">Due to sloppiness and immaturity of Internet Explorer,
+    we are unable to ensure this page to be properly displayed and fully functional
+    under Internet Explorer.
+    </div>
+    --> 
+    {% block content %}{% endblock %}
+    </div>
+    <div id="footer">
+    	Copyright 2008-2010 <a href="http://blog.sumin.us">Sumin Byeon</a>.
+    	All rights reserved unless otherwise specified.
+    </div>
+</div>
+{% if not settings.Debug %}
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-346833-5");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+{% endif %}
+</body>
+</html>

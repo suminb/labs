@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Finance {% endblock %}
+
+{% block content %}
+
+<h1>Transactions</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Amount</th>
+            <th>Merchant</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for transaction in transactions %}
+        <tr>
+            <td>{{transaction.timestamp}}</td>
+            <td>{{transaction.amount|floatformat:2}}</td>
+            <td>{{transaction.merchant}}</td>
+            <td><a href="/finance/transaction/edit/{{transaction.key}}">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<a href="/finance/transaction/add">Add a Transaction</a>
+    
+{% endblock %}

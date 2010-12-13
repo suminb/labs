@@ -1,0 +1,1440 @@
+<html>
+<head>
+<script>
+
+var timer = true;
+
+function random(lower, upper) {
+	return Math.random()*(upper-lower) + lower;
+}
+
+function randint(lower, upper) {
+	return Math.floor(random(lower, upper));
+}
+
+function randz(type) {
+	var n = 0;
+	if(type == 'p') {
+		n = randint(Math.pow(2, 4), Math.pow(2, 13));
+	}
+	else if(type == 'h') {
+		n = randint(Math.pow(2, 4), Math.pow(2, 20));
+	}
+	else {
+		n = randint(Math.pow(2, 4), Math.pow(2, 19));
+	}
+	return Math.floor(Math.log(n) / Math.log(2));
+}
+
+function boom() {
+	var t = ts[randint(0, ts.length)];
+//	var dx = random(-0.02, 0.05);
+//	var dy = random(-0.02, 0.05);
+	
+	var city = cities[randint(0, cities.length-1)];
+	var z = randz(t);
+	var x = city[0] + random(-1.0, 1.0)/z;
+	var y = city[1] + random(-1.0, 1.0)/z;
+	
+	var url = 'http://maps.google.com/?ie=UTF8&ll='+y+','+x+'&t='+t+'&z='+z+'&output=embed';
+	
+	var view = document.getElementById('googlemaps');
+	view.src = url;
+	
+	var status = document.getElementById('status-label');
+	status.innerText = '(x, y, z, t) = ('+x+','+y+','+z+','+t+')';
+	
+	if(timer)
+		setTimeout('boom()', random(10000, 50000));
+}
+
+var ts = new Array('', 'h', 'h', 'p');
+
+var cities = new Array(
+	// US cities
+	new Array(-85.85, 33.58), // Anniston,AL
+	new Array(-85.44, 32.67), // Auburn,AL
+	new Array(-86.75, 33.57), // Birmingham,AL
+	new Array(-87.25, 32.90), // Centreville,AL
+	new Array(-85.45, 31.32), // Dothan,AL
+	new Array(-85.72, 31.28), // FortRucker,AL
+	new Array(-86.09, 33.97), // Gadsden,AL
+	new Array(-86.77, 34.65), // Huntsville,AL
+	new Array(-86.37, 32.38), // MaxwellAFB,AL
+	new Array(-88.25, 30.68), // Mobile,AL
+	new Array(-88.07, 30.63), // MobileAeros,AL
+	new Array(-86.40, 32.30), // Montgomery,AL
+	new Array(-87.62, 34.75), // MuscleShoal,AL
+	new Array(-86.99, 32.34), // Selma,AL
+	new Array(-86.02, 31.87), // Troy,AL
+	new Array(-87.62, 33.23), // Tuscaloosa,AL
+	new Array(-176.65, 51.88), // Adak,AK
+	new Array(-150.02, 61.17), // Anchorage,AK
+	new Array(-149.85, 61.22), // Anchorage,AK
+	new Array(-134.97, 57.83), // Angoon,AK
+	new Array(-159.53, 61.58), // Aniak,AK
+	new Array(-131.57, 55.03), // AnnetteIsl,AK
+	new Array(-173.30, 53.50), // Attu,AK
+	new Array(-156.78, 71.30), // Barrow,AK
+	new Array(-143.63, 70.13), // BarterIslan,AK
+	new Array(-161.80, 60.78), // BethelArpt,AK
+	new Array(-151.52, 66.92), // Bettles,AK
+	new Array(-145.73, 64.00), // BigDelta,AK
+	new Array(-134.22, 56.00), // CapeDecis,AK
+	new Array(-137.05, 58.33), // CapeSpence,AK
+	new Array(-148.48, 67.50), // ChandalarLk,AK
+	new Array(-144.07, 65.83), // CircleCity,AK
+	new Array(-162.72, 55.20), // ColdBay,AK
+	new Array(-145.50, 60.50), // Cordova,AK
+	new Array(-133.25, 55.80), // Craig,AK
+	new Array(-148.47, 70.20), // Deadhorse,AK
+	new Array(-158.52, 59.05), // Dillingham,AK
+	new Array(-166.53, 53.88), // DutchHarbor,AK
+	new Array(-141.15, 64.77), // EagleArpt,AK
+	new Array(-135.37, 59.62), // EldredRock,AK
+	new Array(-136.35, 58.20), // ElfinCove,AK
+	new Array(-147.87, 64.82), // Fairbanks,AK
+	new Array(-154.47, 62.85), // Farewell,AK
+	new Array(-134.03, 57.45), // FiveFinger,AK
+	new Array(-149.83, 65.93), // FiveMile,AK
+	new Array(-145.27, 66.57), // FortYukon,AK
+	new Array(-134.90, 58.25), // FunterBay,AK
+	new Array(-149.48, 68.48), // GalbraithLk,AK
+	new Array(-171.73, 63.77), // Gambell,AK
+	new Array(-145.45, 62.15), // GulkanaArpt,AK
+	new Array(-135.73, 58.42), // Gustavus,AK
+	new Array(-151.50, 59.63), // Homer,AK
+	new Array(-154.92, 59.75), // IliamnaArpt,AK
+	new Array(-134.58, 58.37), // Juneau,AK
+	new Array(-133.95, 56.97), // KakeSeaplan,AK
+	new Array(-151.25, 60.57), // Kenai,AK
+	new Array(-131.70, 55.35), // Ketchikan,AK
+	new Array(-156.65, 58.68), // KingSalmon,AK
+	new Array(-152.50, 57.75), // Kodiak,AK
+	new Array(-162.63, 66.87), // Kotzebue,AK
+	new Array(-153.23, 70.92), // Lonely(dew),AK
+	new Array(-150.65, 65.00), // ManleyHtSp,AK
+	new Array(-142.92, 61.43), // Mccarthy,AK
+	new Array(-155.62, 62.97), // Mcgrath,AK
+	new Array(-166.27, 60.37), // Mekoryuk,AK
+	new Array(-146.33, 59.43), // MiddletonIs,AK
+	new Array(-152.27, 63.90), // Minchumina,AK
+	new Array(-149.08, 64.55), // Nenana,AK
+	new Array(-163.30, 62.07), // NewAndreafs,AK
+	new Array(-169.42, 53.58), // Nikolski,AK
+	new Array(-165.43, 64.50), // Nome,AK
+	new Array(-141.93, 62.97), // Northway,AK
+	new Array(-149.88, 70.50), // OliktokDew,AK
+	new Array(-149.08, 61.60), // Palmer,AK
+	new Array(-132.97, 56.82), // Petersburg,AK
+	new Array(-162.92, 69.82), // PointLay,AK
+	new Array(-166.87, 65.25), // PortClarnce,AK
+	new Array(-158.62, 56.95), // PortHeiden,AK
+	new Array(-150.65, 66.82), // ProspectCrk,AK
+	new Array(-148.33, 70.25), // PrudhoeBay,AK
+	new Array(-153.25, 62.17), // Puntilla,AK
+	new Array(-160.50, 55.33), // SandPoint,AK
+	new Array(-174.13, 53.20), // Shemy,AK
+	new Array(-166.03, 66.27), // Shishmaref,AK
+	new Array(-135.35, 57.07), // Sitka,AK
+	new Array(-154.20, 56.88), // Sitkinak,AK
+	new Array(-135.53, 59.75), // Skagway,AK
+	new Array(-151.20, 61.97), // Skwentna,AK
+	new Array(-170.22, 57.15), // StPaulIs,AK
+	new Array(-150.10, 62.30), // Talkeetna,AK
+	new Array(-152.10, 65.17), // Tanana,AK
+	new Array(-152.13, 69.37), // Umiat,AK
+	new Array(-160.80, 63.88), // Unalakleet,AK
+	new Array(-146.35, 61.13), // Valdez,AK
+	new Array(-146.25, 61.13), // Valdez2,AK
+	new Array(-159.85, 70.62), // Wainwright,AK
+	new Array(-168.08, 66.03), // Wales,AK
+	new Array(-132.37, 56.48), // Wrangell,AK
+	new Array(-139.67, 59.52), // Yakutat,AK
+	new Array(-110.88, 32.17), // Davis-MAFB,AZ
+	new Array(-112.08, 33.68), // DeerValley,AZ
+	new Array(-109.60, 31.45), // Douglas,AZ
+	new Array(-111.73, 33.47), // FalconFld,AZ
+	new Array(-111.67, 35.13), // Flagstaff,AZ
+	new Array(-110.35, 31.60), // FortHuachuc,AZ
+	new Array(-113.17, 33.55), // GilaBend,AZ
+	new Array(-112.38, 33.42), // Goodyear,AZ
+	new Array(-112.15, 35.95), // GrandCanyon,AZ
+	new Array(-113.95, 35.27), // Kingman,AZ
+	new Array(-112.38, 33.53), // Luke,AZ
+	new Array(-111.45, 36.93), // Page,AZ
+	new Array(-112.02, 33.43), // Phoenix,AZ
+	new Array(-112.43, 34.65), // Prescott,AZ
+	new Array(-111.92, 33.62), // Scottsdale,AZ
+	new Array(-110.00, 34.27), // ShowLow,AZ
+	new Array(-110.93, 32.12), // Tucson,AZ
+	new Array(-111.67, 33.30), // WilliamsAFB,AZ
+	new Array(-110.73, 35.02), // Winslow,AZ
+	new Array(-115.00, 33.10), // Yuma,AZ
+	new Array(-114.62, 32.65), // YumaMcas,AZ
+	new Array(-89.95, 35.97), // Blytheville,AR
+	new Array(-92.40, 33.52), // Camden,AR
+	new Array(-92.80, 33.22), // ElDorado,AR
+	new Array(-94.17, 36.00), // Fayetteville,AR
+	new Array(-94.37, 35.33), // FtSmith,AR
+	new Array(-93.15, 36.27), // Harrison,AR
+	new Array(-93.10, 34.48), // HotSprings,AR
+	new Array(-90.65, 35.83), // Jonesboro,AR
+	new Array(-92.38, 35.22), // LittleRock,AR
+	new Array(-92.15, 34.92), // LittleRock,AR
+	new Array(-92.25, 34.83), // LittleRock,AR
+	new Array(-91.93, 34.17), // PineBluff,AR
+	new Array(-94.13, 36.18), // Springdale,AR
+	new Array(-94.00, 33.45), // Texarkana,AR
+	new Array(-90.93, 36.13), // WalnutRidge,AR
+	new Array(-122.32, 37.78), // AlamedaNAS,CA
+	new Array(-124.10, 40.98), // Arcata,CA
+	new Array(-119.05, 35.43), // Bakersfield,CA
+	new Array(-121.45, 39.13), // BealeAFB,CA
+	new Array(-116.95, 33.93), // Beaumont,CA
+	new Array(-116.62, 35.28), // BicycleLk,CA
+	new Array(-118.60, 37.60), // Bishop,CA
+	new Array(-120.70, 39.28), // BlueCanyon,CA
+	new Array(-114.72, 33.62), // Blythe,CA
+	new Array(-118.37, 34.20), // Burbank,CA
+	new Array(-117.35, 33.30), // CampPendlet,CA
+	new Array(-116.47, 32.62), // Campo,CA
+	new Array(-117.28, 33.13), // Carlsbad,CA
+	new Array(-120.57, 37.38), // CastleAFB,CA
+	new Array(-121.85, 39.78), // Chico,CA
+	new Array(-117.68, 35.68), // ChinaLake,CA
+	new Array(-117.63, 33.97), // Chino,CA
+	new Array(-122.05, 37.98), // Concord,CA
+	new Array(-124.23, 41.78), // CrescentCty,CA
+	new Array(-116.78, 34.87), // Daggett,CA
+	new Array(-117.88, 34.90), // EdwardsAFB,CA
+	new Array(-115.68, 32.82), // ElCentro,CA
+	new Array(-118.03, 34.08), // ElMonte,CA
+	new Array(-117.73, 33.67), // ElToro,CA
+	new Array(-124.28, 41.33), // Eureka,CA
+	new Array(-121.32, 36.00), // FortHunter,CA
+	new Array(-121.77, 36.68), // FortOrd,CA
+	new Array(-119.72, 36.77), // Fresno,CA
+	new Array(-117.97, 33.87), // Fullerton,CA
+	new Array(-117.38, 34.58), // GeorgeAFB,CA
+	new Array(-118.33, 33.92), // Hawthorne,CA
+	new Array(-122.12, 37.65), // Hayward,CA
+	new Array(-115.57, 32.83), // Imperial,CA
+	new Array(-117.12, 32.57), // ImperialBch,CA
+	new Array(-117.78, 34.10), // LaVerne,CA
+	new Array(-120.00, 38.90), // LakeTahoe,CA
+	new Array(-118.22, 34.73), // Lancaster,CA
+	new Array(-119.95, 36.33), // LemooreNAS,CA
+	new Array(-121.82, 37.70), // Livermore,CA
+	new Array(-118.15, 33.82), // LongBeach,CA
+	new Array(-118.05, 33.78), // LosAlamitos,CA
+	new Array(-118.40, 33.93), // LosAngeles,CA
+	new Array(-118.92, 37.63), // MammothLks,CA
+	new Array(-117.27, 33.88), // MarchAFB,CA
+	new Array(-121.57, 39.10), // Marysville,CA
+	new Array(-121.30, 38.57), // MatherAFB,CA
+	new Array(-121.40, 38.67), // Mcclellan,CA
+	new Array(-120.52, 37.28), // Merced,CA
+	new Array(-117.15, 32.87), // MiramarNAS,CA
+	new Array(-120.95, 37.63), // Modesto,CA
+	new Array(-122.05, 37.42), // MoffetNAS,CA
+	new Array(-118.15, 35.05), // Mojave,CA
+	new Array(-121.85, 36.58), // Monterey,CA
+	new Array(-122.32, 41.32), // MountShasta,CA
+	new Array(-118.07, 34.23), // MountWilson,CA
+	new Array(-122.28, 38.22), // Napa,CA
+	new Array(-114.62, 34.77), // Needles,CA
+	new Array(-117.20, 32.70), // NorthIs,CA
+	new Array(-117.23, 34.10), // NortonAFB,CA
+	new Array(-122.22, 37.73), // Oakland,CA
+	new Array(-117.62, 34.05), // OntarioIntl,CA
+	new Array(-119.20, 34.20), // Oxnard,CA
+	new Array(-116.50, 33.83), // PalmSprings,CA
+	new Array(-118.13, 35.05), // Palmdale,CA
+	new Array(-122.12, 37.47), // PaloAlto,CA
+	new Array(-120.63, 35.67), // PasoRobles,CA
+	new Array(-119.12, 34.12), // PointMugu,CA
+	new Array(-124.22, 39.58), // PtArena,CA
+	new Array(-121.12, 34.95), // PtArguello,CA
+	new Array(-121.47, 36.12), // PtPiedras,CA
+	new Array(-122.25, 40.15), // RedBluff,CA
+	new Array(-122.30, 40.50), // Redding,CA
+	new Array(-117.45, 33.95), // Riverside,CA
+	new Array(-121.50, 38.52), // Sacramento,CA
+	new Array(-121.60, 38.70), // Sacramento,CA
+	new Array(-121.60, 36.67), // Salinas,CA
+	new Array(-122.25, 37.52), // SanCarlos,CA
+	new Array(-118.58, 33.02), // SanClemente,CA
+	new Array(-117.13, 32.82), // SanDiego,CA
+	new Array(-117.17, 32.73), // SanDiego,CA
+	new Array(-116.98, 32.57), // SanDiego,CA
+	new Array(-116.98, 32.57), // SanDiego,CA
+	new Array(-116.97, 32.82), // SanDiego,CA
+	new Array(-122.38, 37.62), // SanFrancisco,CA
+	new Array(-121.92, 37.37), // SanJose,CA
+	new Array(-121.82, 37.33), // SanJose/Rei,CA
+	new Array(-120.65, 35.23), // SanLuisObi,CA
+	new Array(-119.45, 33.25), // SanNicIsl,CA
+	new Array(-118.73, 34.75), // Sandburg,CA
+	new Array(-117.88, 33.67), // SantaAna,CA
+	new Array(-119.83, 34.43), // SantaBarb,CA
+	new Array(-120.45, 34.90), // SantaMaria,CA
+	new Array(-118.45, 34.02), // SantaMonica,CA
+	new Array(-122.82, 38.52), // SantaRosa,CA
+	new Array(-122.47, 41.78), // Siskiyou,CA
+	new Array(-121.25, 37.90), // Stockton,CA
+	new Array(-120.95, 40.63), // Susanville,CA
+	new Array(-116.17, 33.63), // Thermal,CA
+	new Array(-118.33, 33.80), // Torrance,CA
+	new Array(-121.93, 38.27), // TravisAFB,CA
+	new Array(-120.13, 39.32), // Truckee-Tahoe,CA
+	new Array(-117.83, 33.70), // TustinMcas,CA
+	new Array(-116.15, 34.28), // Twenty9Palm,CA
+	new Array(-123.20, 39.13), // Ukiah,CA
+	new Array(-118.48, 34.22), // VanNuys,CA
+	new Array(-120.95, 35.20), // Vandenberg,CA
+	new Array(-120.95, 35.20), // Vandenberg,CA
+	new Array(-119.40, 36.32), // Visalia,CA
+	new Array(-105.35, 39.52), // AirForceA,CO
+	new Array(-103.22, 40.17), // Akron,CO
+	new Array(-105.87, 37.45), // Alamosa,CO
+	new Array(-106.87, 39.22), // Aspen,CO
+	new Array(-105.12, 39.90), // Brmfield/Jef,CO
+	new Array(-104.75, 39.72), // Buckley,CO
+	new Array(-104.72, 38.82), // ColoSprgs,CO
+	new Array(-108.63, 37.30), // Cortez,CO
+	new Array(-107.53, 40.50), // Craig-Moffat,CO
+	new Array(-104.87, 39.75), // Denver,CO
+	new Array(-107.75, 37.15), // Durango,CO
+	new Array(-106.92, 39.65), // Eagle,CO
+	new Array(-104.83, 39.57), // Englewood,CO
+	new Array(-104.77, 38.68), // FortCarson,CO
+	new Array(-105.50, 39.57), // Fraser,CO
+	new Array(-105.02, 40.45), // FtCol/Lovel,CO
+	new Array(-105.08, 40.58), // FtCollins,CO
+	new Array(-108.53, 39.12), // GrandJct,CO
+	new Array(-104.63, 40.43), // Greeley-Wld,CO
+	new Array(-106.92, 38.55), // Gunnison,CO
+	new Array(-103.52, 38.05), // LaJunta,CO
+	new Array(-106.30, 39.25), // Leadville,CO
+	new Array(-103.70, 39.18), // Limon,CO
+	new Array(-107.88, 38.50), // Montrose,CO
+	new Array(-104.52, 38.28), // Pueblo,CO
+	new Array(-106.82, 40.48), // SteamboatSp,CO
+	new Array(-104.33, 37.25), // Trinidad,CO
+	new Array(-73.13, 41.17), // Bridgeport,CT
+	new Array(-73.48, 41.37), // Danbury,CT
+	new Array(-72.05, 41.33), // Groton,CT
+	new Array(-72.65, 41.73), // Hartford,CT
+	new Array(-72.88, 41.27), // NewHaven,CT
+	new Array(-72.68, 41.93), // WindsorLoc,CT
+	new Array(-75.47, 39.13), // Dover,DE
+	new Array(-75.60, 39.67), // Wilmington,DE
+	new Array(-77.46, 38.95), // Washington/Dulles,DC
+	new Array(-77.04, 38.85), // Washington/Natl,DC
+	new Array(-85.03, 29.73), // Apalachicola,FL
+	new Array(-81.55, 28.08), // AvonParkG,FL
+	new Array(-80.55, 28.47), // CapeCanaveral,FL
+	new Array(-81.88, 30.22), // Cecil,FL
+	new Array(-86.52, 30.78), // Crestview,FL
+	new Array(-83.10, 29.62), // CrossCity,FL
+	new Array(-81.05, 29.18), // DaytonaBch,FL
+	new Array(-86.52, 30.65), // DukeFld,FL
+	new Array(-86.53, 30.48), // EglinAFB,FL
+	new Array(-80.13, 26.13), // FortLauderd,FL
+	new Array(-81.87, 26.58), // FortMyers,FL
+	new Array(-80.15, 26.07), // FtLauderdale,FL
+	new Array(-81.87, 26.65), // FtMyers,FL
+	new Array(-82.27, 29.68), // Gainesville,FL
+	new Array(-80.38, 25.48), // Homestead,FL
+	new Array(-86.68, 30.43), // HurlburtFld,FL
+	new Array(-81.52, 30.33), // Jacksonville,FL
+	new Array(-81.70, 30.50), // Jacksonville,FL
+	new Array(-81.68, 30.23), // Jacksonville,FL
+	new Array(-81.75, 24.55), // KeyWest,FL
+	new Array(-81.68, 24.57), // KeyWestNAS,FL
+	new Array(-81.95, 28.03), // Lakeland,FL
+	new Array(-82.52, 27.85), // MacdillAFB,FL
+	new Array(-85.18, 30.84), // Marianna,FL
+	new Array(-81.42, 30.40), // MayportNAS,FL
+	new Array(-80.63, 28.10), // Melbourne,FL
+	new Array(-80.28, 25.82), // MiamiIntl,FL
+	new Array(-80.28, 25.92), // Miami/Opa,FL
+	new Array(-80.43, 25.65), // Miami/Tamiami,FL
+	new Array(-81.80, 26.13), // Naples,FL
+	new Array(-81.32, 28.43), // Orlando,FL
+	new Array(-81.33, 28.55), // Orlando,FL
+	new Array(-85.68, 30.20), // PanamaCity,FL
+	new Array(-80.60, 28.23), // PatrickAFB,FL
+	new Array(-87.32, 30.35), // Pensacola,FL
+	new Array(-87.20, 30.47), // Pensacola,FL
+	new Array(-82.60, 27.97), // Ruskin,FL
+	new Array(-82.68, 27.92), // SaintPeters,FL
+	new Array(-81.25, 28.78), // Sanford,FL
+	new Array(-82.55, 27.40), // Sarasota,FL
+	new Array(-84.37, 30.38), // Tallahassee,FL
+	new Array(-82.53, 27.97), // TampaIntl,FL
+	new Array(-80.80, 28.52), // Titusville,FL
+	new Array(-85.58, 30.07), // TyndallAFB,FL
+	new Array(-80.42, 27.65), // VeroBeach,FL
+	new Array(-80.12, 26.68), // WPalmBeach,FL
+	new Array(-87.02, 30.72), // WhitingFld,FL
+	new Array(-84.18, 31.53), // Albany,GA
+	new Array(-82.52, 31.53), // Alma,GA
+	new Array(-83.32, 33.95), // Athens,GA
+	new Array(-84.42, 33.65), // Atlanta,GA
+	new Array(-84.42, 33.65), // Atlanta,GA
+	new Array(-84.30, 33.88), // Atlanta/Dklb,GA
+	new Array(-84.52, 33.78), // Atlanta/Fltn,GA
+	new Array(-81.97, 33.37), // Augusta/Bush,GA
+	new Array(-81.38, 31.15), // Brunswick,GA
+	new Array(-84.93, 32.52), // Columbus,GA
+	new Array(-84.52, 33.92), // DobbinsAFB,GA
+	new Array(-84.87, 34.53), // DobbinsAFB,GA
+	new Array(-85.00, 32.33), // FortBenning,GA
+	new Array(-81.57, 31.88), // FtStewart,GA
+	new Array(-81.15, 32.02), // HunterAaf,GA
+	new Array(-85.07, 33.01), // LaGrange,GA
+	new Array(-83.65, 32.70), // Macon/Lewis,GA
+	new Array(-83.20, 30.97), // MoodyAFB,GA
+	new Array(-83.60, 32.63), // RobinsAFB,GA
+	new Array(-85.17, 34.35), // Rome/Russell,GA
+	new Array(-81.20, 32.13), // SavannahMun,GA
+	new Array(-83.28, 30.78), // Valdosta,GA
+	new Array(-82.40, 31.25), // Waycross,GA
+	new Array(-158.12, 21.53), // BarbersPt,HI
+	new Array(-158.12, 21.53), // BarbersPt,HI
+	new Array(-160.30, 22.05), // BarkingSan,HI
+	new Array(-155.07, 19.72), // Hilo,HI
+	new Array(-157.93, 21.35), // HonoluluInt,HI
+	new Array(-156.43, 20.90), // KahuluiMaui,HI
+	new Array(-158.28, 21.75), // KaneoheMca,HI
+	new Array(-158.28, 21.75), // KaneoheMca,HI
+	new Array(-156.05, 19.75), // Ke-Ahole/Kon,HI
+	new Array(-156.95, 20.80), // Lanai-Lanai,HI
+	new Array(-159.35, 21.98), // Lihue-Kauai,HI
+	new Array(-156.83, 20.97), // Maui,HI
+	new Array(-157.10, 21.15), // Molokai,HI
+	new Array(-156.12, 20.00), // Waimea-Koha,HI
+	new Array(-116.22, 43.57), // Boise,ID
+	new Array(-113.77, 42.53), // Burley,ID
+	new Array(-116.82, 47.77), // Coeurd'Alene,ID
+	new Array(-115.17, 43.00), // Gooding,ID
+	new Array(-112.07, 43.52), // IdahoFalls,ID
+	new Array(-117.02, 46.38), // Lewiston,ID
+	new Array(-112.32, 42.17), // MaladCity,ID
+	new Array(-116.10, 44.88), // Mccall,ID
+	new Array(-115.87, 43.05), // MountnHome,ID
+	new Array(-112.60, 42.92), // Pocatello,ID
+	new Array(-114.47, 45.17), // Salmon,ID
+	new Array(-114.30, 43.50), // SunValley,ID
+	new Array(-114.48, 42.48), // TwinFalls,ID
+	new Array(-90.05, 38.88), // Alton,IL
+	new Array(-88.32, 41.77), // Aurora,IL
+	new Array(-90.15, 38.57), // BistatePark,IL
+	new Array(-88.93, 40.48), // Bloomington,IL
+	new Array(-89.60, 41.16), // Bradford,IL
+	new Array(-89.22, 37.07), // Cairo,IL
+	new Array(-89.25, 37.78), // Carbondale,IL
+	new Array(-89.09, 38.51), // Centralia,IL
+	new Array(-88.28, 40.03), // Champaign/Urbana,IL
+	new Array(-87.65, 41.90), // Chicago,IL
+	new Array(-87.62, 41.87), // Chicago/Meigs,IL
+	new Array(-87.75, 41.78), // Chicago/Midway,IL
+	new Array(-87.90, 41.98), // Chicago/O'hare,IL
+	new Array(-87.60, 40.20), // Danville,IL
+	new Array(-88.72, 41.93), // DeKalb,IL
+	new Array(-88.87, 39.83), // Decatur,IL
+	new Array(-88.25, 41.92), // DuPage,IL
+	new Array(-90.43, 40.93), // Galesburg,IL
+	new Array(-87.82, 42.08), // GlenviewNAS,IL
+	new Array(-87.85, 41.07), // Kankakee,IL
+	new Array(-90.66, 40.52), // Macomb,IL
+	new Array(-89.00, 37.75), // Marion,IL
+	new Array(-88.68, 41.37), // Marseilles,IL
+	new Array(-88.28, 39.48), // Mattoon,IL
+	new Array(-90.52, 41.45), // Moline/Quad,IL
+	new Array(-88.86, 38.32), // MountVernon,IL
+	new Array(-89.68, 40.67), // Peoria,IL
+	new Array(-91.20, 39.93), // Quincy,IL
+	new Array(-89.10, 42.20), // Rockford,IL
+	new Array(-88.96, 38.63), // Salem,IL
+	new Array(-89.85, 38.55), // ScottAFB,IL
+	new Array(-89.67, 39.85), // Springfield,IL
+	new Array(-89.67, 41.74), // Sterling,IL
+	new Array(-89.33, 39.53), // Taylorville,IL
+	new Array(-89.17, 38.99), // Vandalia,IL
+	new Array(-86.50, 39.38), // BakalarAf,IN
+	new Array(-86.62, 39.13), // Bloomington,IN
+	new Array(-86.00, 41.72), // Elkhart,IN
+	new Array(-87.53, 38.05), // Evansville,IN
+	new Array(-85.20, 41.00), // FortWayne,IN
+	new Array(-87.42, 41.62), // Gary,IN
+	new Array(-86.15, 40.65), // GrissomAFB,IN
+	new Array(-86.27, 39.73), // Indianapolis,IN
+	new Array(-85.38, 40.23), // Muncie,IN
+	new Array(-86.32, 41.70), // SouthBend,IN
+	new Array(-87.30, 39.45), // TerreHaute,IN
+	new Array(-86.93, 40.42), // WLafayette,IN
+	new Array(-91.12, 40.78), // Burlington,IA
+	new Array(-91.70, 41.88), // CedarRapids,IA
+	new Array(-93.65, 41.53), // DesMoines,IA
+	new Array(-90.70, 42.40), // Dubuque,IA
+	new Array(-94.75, 43.40), // Estherville,IA
+	new Array(-94.18, 42.55), // FortDodge,IA
+	new Array(-93.33, 43.15), // MasonCity,IA
+	new Array(-92.45, 41.10), // Ottumwa,IA
+	new Array(-96.38, 42.40), // SiouxCity,IA
+	new Array(-92.40, 42.55), // WaterlooMun,IA
+	new Array(-95.48, 37.67), // Chanute,KS
+	new Array(-97.65, 39.55), // Concordia,KS
+	new Array(-99.97, 37.77), // DodgeCity,KS
+	new Array(-96.20, 38.33), // Emporia,KS
+	new Array(-94.92, 39.37), // FtLeavnwrth,KS
+	new Array(-96.77, 39.05), // FtRiley,KS
+	new Array(-100.72, 37.93), // GardenCity,KS
+	new Array(-101.70, 39.37), // Goodland,KS
+	new Array(-99.27, 38.85), // Hays,KS
+	new Array(-99.83, 39.38), // HillCity,KS
+	new Array(-97.87, 38.07), // Hutchinson,KS
+	new Array(-94.88, 38.82), // JohnsonCnty,KS
+	new Array(-100.97, 37.05), // Liberal,KS
+	new Array(-96.67, 39.15), // Manhatten,KS
+	new Array(-97.27, 37.62), // McconnellAf,KS
+	new Array(-94.90, 38.85), // Olathe,KS
+	new Array(-98.82, 38.87), // Russell,KS
+	new Array(-97.65, 38.80), // Salina,KS
+	new Array(-95.62, 39.07), // Topeka,KS
+	new Array(-95.67, 38.95), // Topeka/Forbe,KS
+	new Array(-97.43, 37.65), // Wichita,KS
+	new Array(-86.43, 36.97), // BowlingGren,KY
+	new Array(-87.50, 36.67), // FtCampbell,KY
+	new Array(-85.97, 37.90), // FtKnox,KY
+	new Array(-83.32, 37.60), // Jackson,KY
+	new Array(-85.00, 38.05), // Lexington,KY
+	new Array(-84.07, 37.08), // London,KY
+	new Array(-85.67, 38.23), // Louisville,KY
+	new Array(-85.73, 38.18), // Louisville,KY
+	new Array(-87.17, 37.75), // Owensboro,KY
+	new Array(-88.77, 37.07), // Paducah,KY
+	new Array(-92.30, 31.38), // Alexandria,LA
+	new Array(-93.67, 32.50), // Barksdale,LA
+	new Array(-91.15, 30.53), // BatonRouge,LA
+	new Array(-89.67, 29.55), // Boothville,LA
+	new Array(-92.55, 31.33), // EnglandAFB,LA
+	new Array(-93.20, 31.05), // FortPolk,LA
+	new Array(-90.07, 29.18), // GrandIsle,LA
+	new Array(-90.65, 29.57), // Houma,LA
+	new Array(-92.00, 30.20), // Lafayette,LA
+	new Array(-93.22, 30.12), // LakeCharles,LA
+	new Array(-92.05, 32.52), // Monroe,LA
+	new Array(-91.20, 29.70), // MorganCity,LA
+	new Array(-91.88, 30.03), // NewIberia,LA
+	new Array(-90.25, 29.98), // NewOrleans,LA
+	new Array(-90.02, 29.83), // NewOrleans,LA
+	new Array(-90.03, 30.03), // NewOrleans,LA
+	new Array(-93.75, 32.52), // Shreveport,LA
+	new Array(-93.82, 32.47), // Shreveport,LA
+	new Array(-89.82, 30.35), // Slidel,LA
+	new Array(-69.80, 44.32), // Augusta,ME
+	new Array(-68.82, 44.80), // Bangor,ME
+	new Array(-68.37, 44.45), // BarHarbor,ME
+	new Array(-69.93, 43.88), // Brunswick,ME
+	new Array(-68.02, 46.87), // CaribouMun,ME
+	new Array(-67.78, 46.13), // Houlton,ME
+	new Array(-67.88, 46.95), // LoringAFB,ME
+	new Array(-70.32, 43.65), // Portland,ME
+	new Array(-68.05, 46.68), // PresqueIsle,ME
+	new Array(-69.12, 44.07), // Rockland,ME
+	new Array(-70.88, 44.88), // Rumford,ME
+	new Array(-76.87, 38.82), // AndrewsAFB,MD
+	new Array(-76.67, 39.18), // Baltimore,MD
+	new Array(-76.67, 39.18), // Baltimore,MD
+	new Array(-76.42, 39.33), // Baltimore,MD
+	new Array(-76.77, 39.08), // FortMeade,MD
+	new Array(-77.72, 39.70), // Hagerstown,MD
+	new Array(-76.40, 38.28), // Patuxent,MD
+	new Array(-76.17, 39.47), // Phillips,MD
+	new Array(-75.50, 38.33), // Salisbury,MD
+	new Array(-71.28, 42.47), // Bedford,MA
+	new Array(-70.92, 42.58), // Beverly,MA
+	new Array(-71.03, 42.37), // Boston,MA
+	new Array(-69.97, 41.67), // Chatham,MA
+	new Array(-71.60, 42.57), // FortDevens,MA
+	new Array(-70.28, 41.67), // Hyannis,MA
+	new Array(-71.12, 42.72), // Lawrence,MA
+	new Array(-70.62, 41.40), // MarthasVine,MA
+	new Array(-70.07, 41.25), // Nantucket,MA
+	new Array(-70.97, 41.68), // NewBedford,MA
+	new Array(-71.18, 42.18), // Norwood,MA
+	new Array(-70.52, 41.65), // OtisANGB,MA
+	new Array(-73.18, 42.26), // Pittsfield,MA
+	new Array(-70.93, 42.15), // SWeymouth,MA
+	new Array(-72.72, 42.17), // Westfield,MA
+	new Array(-72.53, 42.20), // Westover,MA
+	new Array(-71.87, 42.27), // Worcester,MA
+	new Array(-83.57, 45.07), // Alpena,MI
+	new Array(-83.75, 42.22), // AnnArbor,MI
+	new Array(-85.23, 42.30), // BattleCreek,MI
+	new Array(-86.43, 42.13), // BentonHarbor,MI
+	new Array(-84.47, 46.25), // Chippewa,MI
+	new Array(-83.02, 42.42), // Detroit,MI
+	new Array(-83.33, 42.23), // Detroit,MI
+	new Array(-87.08, 45.73), // Escanaba,MI
+	new Array(-83.75, 42.97), // Flint/Bishop,MI
+	new Array(-85.52, 42.88), // GrandRapids,MI
+	new Array(-88.50, 47.17), // Hancock,MI
+	new Array(-84.68, 44.37), // HoughtonLake,MI
+	new Array(-88.12, 45.82), // IronMtn,MI
+	new Array(-90.13, 46.53), // Ironwood,MI
+	new Array(-84.47, 42.27), // Jackson,MI
+	new Array(-85.55, 42.23), // Kalamazoo,MI
+	new Array(-84.60, 42.77), // Lansing,MI
+	new Array(-86.25, 44.27), // Manistee,MI
+	new Array(-87.95, 46.88), // Marquette,MI
+	new Array(-87.63, 45.12), // Menominee,MI
+	new Array(-86.25, 43.17), // Muskegon,MI
+	new Array(-84.80, 45.57), // Pellston,MI
+	new Array(-83.42, 42.67), // Pontiac,MI
+	new Array(-84.08, 43.53), // Saginaw,MI
+	new Array(-84.37, 46.47), // SaultSteM,MI
+	new Array(-87.40, 46.35), // SawyerAFB,MI
+	new Array(-82.83, 42.62), // Selfridge,MI
+	new Array(-85.58, 44.73), // TraverseCty,MI
+	new Array(-83.40, 44.45), // Wurtsmith,MI
+	new Array(-83.53, 42.23), // Ypsilanti,MI
+	new Array(-93.37, 43.68), // AlbertLea,MN
+	new Array(-95.38, 45.87), // Alexandria,MN
+	new Array(-94.93, 47.50), // BemidjiMuni,MN
+	new Array(-94.13, 46.40), // Brainerd-Crw,MN
+	new Array(-95.88, 46.82), // DetroitLaks,MN
+	new Array(-92.18, 46.83), // Duluth,MN
+	new Array(-91.82, 47.90), // Ely,MN
+	new Array(-94.42, 43.65), // Fairmont,MN
+	new Array(-96.07, 46.30), // FergusFalls,MN
+	new Array(-93.52, 47.22), // GrandRapids,MN
+	new Array(-92.85, 47.38), // Hibbing,MN
+	new Array(-93.38, 48.57), // IntlFalls,MN
+	new Array(-93.92, 44.22), // Mankato,MN
+	new Array(-95.82, 44.45), // MarshallArpt,MN
+	new Array(-93.47, 44.83), // Minneapolis,MN
+	new Array(-93.38, 45.07), // Minneapolis,MN
+	new Array(-93.22, 44.88), // Minneapolis,MN
+	new Array(-95.07, 46.90), // ParkRapids,MN
+	new Array(-95.08, 44.55), // RedwoodFalls,MN
+	new Array(-92.50, 43.92), // Rochester,MN
+	new Array(-93.05, 44.93), // SaintPaul,MN
+	new Array(-94.07, 45.55), // StCloud,MN
+	new Array(-96.18, 48.07), // ThiefRiver,MN
+	new Array(-95.58, 43.65), // Worthington,MN
+	new Array(-88.45, 33.65), // ColumbusAFB,MS
+	new Array(-88.58, 33.45), // GoldenTrian,MS
+	new Array(-90.98, 33.48), // Greenville,MS
+	new Array(-90.08, 33.50), // Greenwood,MS
+	new Array(-89.07, 30.40), // Gulfport,MS
+	new Array(-89.33, 31.47), // Hattiesburg,MS
+	new Array(-90.08, 32.32), // Jackson,MS
+	new Array(-88.92, 30.42), // KeeslerAFB,MS
+	new Array(-89.17, 31.67), // Laurel,MS
+	new Array(-90.47, 31.18), // Mccomb,MS
+	new Array(-88.57, 32.55), // MeridianNAS,MS
+	new Array(-88.75, 32.33), // Meridian/Key,MS
+	new Array(-91.25, 31.62), // Natchez,MS
+	new Array(-89.54, 34.39), // Oxford,MS
+	new Array(-88.77, 34.27), // Tupelo,MS
+	new Array(-92.22, 38.82), // Columbia,MO
+	new Array(-89.58, 37.23), // CpGirardeau,MO
+	new Array(-92.13, 37.75), // FtLeonard,MO
+	new Array(-92.17, 38.60), // JeffersonCity,MO
+	new Array(-94.50, 37.17), // Joplin,MO
+	new Array(-94.72, 39.32), // KansasCity,MO
+	new Array(-94.60, 39.12), // KansasCity,MO
+	new Array(-92.55, 40.10), // Kirksville,MO
+	new Array(-94.35, 37.33), // Monett,MO
+	new Array(-95.36, 35.66), // Muskogee,MO
+	new Array(-94.55, 38.85), // Richards-Geb,MO
+	new Array(-93.38, 37.23), // Springfield,MO
+	new Array(-95.53, 40.28), // StJoseph,MO
+	new Array(-90.37, 38.75), // StLouis,MO
+	new Array(-90.63, 38.65), // StLouis/Spirit,MO
+	new Array(-91.77, 38.13), // Vichy/Rolla,MO
+	new Array(-91.90, 36.88), // WestPlains,MO
+	new Array(-93.55, 38.73), // WhitemanAFB,MO
+	new Array(-108.53, 45.80), // Billings,MT
+	new Array(-111.15, 45.78), // Bozeman,MT
+	new Array(-112.50, 45.95), // Butte,MT
+	new Array(-112.37, 48.60), // CutBank,MT
+	new Array(-112.55, 45.25), // Dillon,MT
+	new Array(-106.62, 48.22), // Glasgow,MT
+	new Array(-104.80, 47.13), // Glendive,MT
+	new Array(-111.37, 47.48), // GreatFalls,MT
+	new Array(-109.77, 48.55), // Havre,MT
+	new Array(-112.00, 46.60), // Helena,MT
+	new Array(-106.93, 47.33), // Jordan,MT
+	new Array(-114.27, 48.30), // Kalispell,MT
+	new Array(-109.45, 47.05), // Lewiston,MT
+	new Array(-110.43, 45.70), // Livingston,MT
+	new Array(-111.18, 47.50), // Malmstrom,MT
+	new Array(-105.87, 46.43), // MilesCity,MT
+	new Array(-114.08, 46.92), // Missoula,MT
+	new Array(-112.32, 44.57), // Monida,MT
+	new Array(-104.18, 47.72), // Sidney,MT
+	new Array(-111.10, 44.65), // WYellowston,MT
+	new Array(-111.12, 44.68), // WYellowston,MT
+	new Array(-105.58, 48.10), // WolfPoint,MT
+	new Array(-99.98, 42.58), // Ainsworth,NE
+	new Array(-102.80, 42.05), // Alliance,NE
+	new Array(-96.75, 40.32), // Beatrice,NE
+	new Array(-99.65, 41.43), // BrokenBow,NE
+	new Array(-99.15, 41.78), // Burwell,NE
+	new Array(-103.08, 42.83), // Chadron,NE
+	new Array(-97.35, 41.45), // Columbus,NE
+	new Array(-100.00, 40.87), // Cozad,NE
+	new Array(-95.58, 40.07), // FallsCity,NE
+	new Array(-98.32, 40.97), // GrandIsland,NE
+	new Array(-98.43, 40.60), // Hastings,NE
+	new Array(-101.63, 40.53), // Imperial,NE
+	new Array(-99.00, 40.73), // Kearney,NE
+	new Array(-96.75, 40.85), // LincolnMuni,NE
+	new Array(-100.58, 40.22), // Mccook,NE
+	new Array(-101.05, 42.05), // Mullen,NE
+	new Array(-97.43, 41.98), // Norfolk,NE
+	new Array(-96.02, 41.37), // NorthOmaha,NE
+	new Array(-100.68, 41.13), // NorthPlatte,NE
+	new Array(-98.68, 42.47), // O'neill,NE
+	new Array(-95.92, 41.12), // OffuttAFB,NE
+	new Array(-95.90, 41.30), // Omaha/Eppley,NE
+	new Array(-98.95, 41.62), // Ord/Sharp,NE
+	new Array(-103.60, 41.87), // Scottsbluff,NE
+	new Array(-102.98, 41.10), // SidneyMuni,NE
+	new Array(-100.55, 42.87), // Valentine,NE
+	new Array(-117.13, 39.83), // Austin,NV
+	new Array(-116.87, 40.62), // BattleMtn,NV
+	new Array(-115.78, 40.83), // Elko,NV
+	new Array(-114.85, 39.28), // Ely/Yelland,NV
+	new Array(-118.70, 39.42), // FallonNAS,NV
+	new Array(-118.63, 38.55), // Hawthorne,NV
+	new Array(-115.17, 36.08), // LasVegas,NV
+	new Array(-118.92, 40.10), // Lovelock,NV
+	new Array(-116.02, 36.62), // Mercury,NV
+	new Array(-115.03, 36.23), // NellisAFB,NV
+	new Array(-116.17, 42.58), // Owyhee,NV
+	new Array(-119.78, 39.50), // Reno,NV
+	new Array(-117.08, 38.07), // Tonopah,NV
+	new Array(-116.25, 41.33), // Wildhorse,NV
+	new Array(-117.80, 40.90), // Winnemucca,NV
+	new Array(-116.08, 37.58), // YuccaFlat,NV
+	new Array(-71.18, 44.58), // Berlin,NH
+	new Array(-71.50, 43.20), // Concord,NH
+	new Array(-72.00, 42.80), // Jaffrey,NH
+	new Array(-72.27, 42.90), // Keene,NH
+	new Array(-71.43, 43.57), // Laconia,NH
+	new Array(-72.30, 43.63), // Lebanon,NH
+	new Array(-71.43, 42.93), // Manchester,NH
+	new Array(-71.30, 44.27), // MtWashingtn,NH
+	new Array(-71.52, 42.78), // Nashua,NH
+	new Array(-70.82, 43.08), // PeaseAFB,NH
+	new Array(-74.57, 39.45), // AtlanticCty,NJ
+	new Array(-74.28, 40.87), // Fairfield,NJ
+	new Array(-74.35, 40.03), // Lakehurst,NJ
+	new Array(-74.60, 40.02), // McguireAFB,NJ
+	new Array(-75.07, 39.37), // Millville,NJ
+	new Array(-74.42, 40.80), // Morristown,NJ
+	new Array(-74.17, 40.70), // NewarkIntl,NJ
+	new Array(-74.05, 40.85), // Teterboro,NJ
+	new Array(-74.82, 40.28), // Trenton,NJ
+	new Array(-106.60, 35.05), // Albuquerque,NM
+	new Array(-103.32, 34.38), // Cannon,NM
+	new Array(-104.27, 32.33), // Carlsbad,NM
+	new Array(-103.15, 36.45), // ClaytonArpt,NM
+	new Array(-107.70, 32.25), // Deming,NM
+	new Array(-108.23, 36.75), // Farmington,NM
+	new Array(-108.78, 35.52), // Gallup/Clark,NM
+	new Array(-107.90, 35.17), // Grants,NM
+	new Array(-103.20, 32.68), // Hobbs,NM
+	new Array(-106.10, 32.85), // HollomanAFB,NM
+	new Array(-106.77, 32.30), // LasCruces,NM
+	new Array(-105.15, 35.65), // LasVegas,NM
+	new Array(-106.28, 35.88), // LosAlamos,NM
+	new Array(-104.50, 36.74), // Raton,NM
+	new Array(-104.53, 33.30), // Roswell,NM
+	new Array(-106.08, 35.62), // SantaFe,NM
+	new Array(-108.17, 32.63), // SilverCity,NM
+	new Array(-106.90, 34.07), // Socorro,NM
+	new Array(-107.27, 33.23), // TruthOrCon,NM
+	new Array(-103.60, 35.18), // Tucumcari,NM
+	new Array(-73.80, 42.75), // Albany,NY
+	new Array(-75.98, 42.22), // Binghamton,NY
+	new Array(-78.73, 42.93), // Buffalo,NY
+	new Array(-78.20, 42.97), // Dansville,NY
+	new Array(-76.90, 42.17), // Elmira,NY
+	new Array(-73.43, 40.73), // Farmingdale,NY
+	new Array(-75.73, 44.05), // FortDrum,NY
+	new Array(-73.62, 43.35), // GlensFalls,NY
+	new Array(-75.40, 43.23), // GriffissAFB,NY
+	new Array(-73.10, 40.78), // Islip,NY
+	new Array(-76.47, 42.48), // Ithaca,NY
+	new Array(-79.25, 42.15), // Jamestown,NY
+	new Array(-74.85, 44.93), // Massena,NY
+	new Array(-74.80, 41.70), // Monticello,NY
+	new Array(-73.98, 40.77), // NewYork,NY
+	new Array(-73.78, 40.65), // NewYork/JFK,NY
+	new Array(-73.90, 40.77), // NewYork/LGA,NY
+	new Array(-74.10, 41.50), // Newburgh,NY
+	new Array(-78.95, 43.10), // NiagaraFall,NY
+	new Array(-75.40, 44.68), // Ogdensburg,NY
+	new Array(-73.47, 44.65), // Plattsburgh,NY
+	new Array(-73.88, 41.63), // Poughkeepsie,NY
+	new Array(-77.67, 43.12), // Rochester,NY
+	new Array(-77.67, 43.12), // Rochester,NY
+	new Array(-74.20, 44.38), // SaranacLk,NY
+	new Array(-73.93, 42.85), // Schenectady,NY
+	new Array(-76.12, 43.12), // Syracuse,NY
+	new Array(-75.38, 43.15), // Utica,NY
+	new Array(-76.02, 44.00), // Watertown,NY
+	new Array(-72.63, 40.85), // Westhampton,NY
+	new Array(-73.72, 41.07), // WhitePlains,NY
+	new Array(-82.55, 35.43), // Asheville,NC
+	new Array(-75.55, 35.27), // CapeHattera,NC
+	new Array(-80.93, 35.22), // Charlotte,NC
+	new Array(-76.88, 34.90), // CherryPoint,NC
+	new Array(-76.18, 36.27), // Elizabeth,NC
+	new Array(-78.88, 35.00), // Fayetteville,NC
+	new Array(-78.93, 35.13), // FortBragg,NC
+	new Array(-79.95, 36.08), // Greensboro,NC
+	new Array(-81.38, 35.75), // Hickory,NC
+	new Array(-82.82, 35.90), // HotSprings,NC
+	new Array(-77.62, 34.82), // Jacksonville,NC
+	new Array(-77.63, 35.32), // Kinston,NC
+	new Array(-79.50, 35.03), // MackallAaf,NC
+	new Array(-75.68, 35.92), // ManteoArpt,NC
+	new Array(-77.05, 35.08), // NewBern,NC
+	new Array(-77.43, 34.70), // NewRiver,NC
+	new Array(-79.02, 35.17), // PopeAFB,NC
+	new Array(-78.78, 35.87), // Raleigh-Durh,NC
+	new Array(-77.88, 35.85), // RockyMt,NC
+	new Array(-77.97, 35.33), // Seymour-John,NC
+	new Array(-79.39, 35.24), // SouthernPin,NC
+	new Array(-77.92, 34.27), // Wilmington,NC
+	new Array(-80.23, 36.13), // Winston-Salem,NC
+	new Array(-100.75, 46.77), // Bismarck,ND
+	new Array(-98.90, 48.12), // Devil'sLake,ND
+	new Array(-102.80, 46.78), // Dickenson,ND
+	new Array(-96.80, 46.90), // Fargo,ND
+	new Array(-97.18, 47.95), // GrandForks,ND
+	new Array(-97.40, 47.97), // GrandForks,ND
+	new Array(-98.68, 46.92), // Jamestown,ND
+	new Array(-101.35, 48.42), // MinotAFB,ND
+	new Array(-101.28, 48.27), // MinotIntl,ND
+	new Array(-103.63, 48.18), // Williston,ND
+	new Array(-82.23, 39.21), // Athens/Albany,OH
+	new Array(-81.43, 40.92), // Canton,OH
+	new Array(-84.67, 39.05), // Cincinnati,OH
+	new Array(-84.43, 39.10), // Cincinnati,OH
+	new Array(-81.68, 41.52), // Cleveland,OH
+	new Array(-81.48, 41.57), // Cleveland,OH
+	new Array(-81.87, 41.42), // Cleveland,OH
+	new Array(-82.88, 40.00), // Columbus,OH
+	new Array(-83.07, 40.08), // ColumbusOsu,OH
+	new Array(-84.20, 39.90), // Dayton,OH
+	new Array(-83.67, 41.02), // Findlay,OH
+	new Array(-82.52, 40.82), // Mansfield,OH
+	new Array(-82.93, 39.82), // Rickenbacker,OH
+	new Array(-83.80, 41.60), // Toledo,OH
+	new Array(-81.40, 41.63), // Willoughby,OH
+	new Array(-84.05, 39.83), // Wright-PatAFB,OH
+	new Array(-80.67, 41.27), // Youngstown,OH
+	new Array(-81.90, 39.95), // Zanesville,OH
+	new Array(-99.27, 34.67), // AltusAFB,OK
+	new Array(-97.02, 34.30), // Ardmore,OK
+	new Array(-96.00, 36.75), // Bartlesville,OK
+	new Array(-99.20, 35.35), // Clinton,OK
+	new Array(-97.80, 36.38), // Enid,OK
+	new Array(-98.40, 34.65), // FortSill,OK
+	new Array(-99.77, 36.30), // Gage,OK
+	new Array(-99.05, 35.00), // Hobart,OK
+	new Array(-98.42, 34.57), // Lawton,OK
+	new Array(-95.78, 34.88), // Mcalester,OK
+	new Array(-97.47, 35.23), // Norman,OK
+	new Array(-97.60, 35.40), // OklahomaCty,OK
+	new Array(-97.65, 35.53), // OklahomaCty,OK
+	new Array(-94.62, 34.68), // Page,OK
+	new Array(-97.10, 36.73), // PoncaCity,OK
+	new Array(-97.09, 36.16), // Stillwater,OK
+	new Array(-97.38, 35.42), // TinkerAFB,OK
+	new Array(-95.90, 36.20), // Tulsa,OK
+	new Array(-97.92, 36.33), // VanceAFB,OK
+	new Array(-123.88, 46.15), // Astoria,OR
+	new Array(-117.82, 44.83), // Baker,OR
+	new Array(-118.95, 43.60), // BurnsArpt,OR
+	new Array(-121.88, 45.68), // Cascade,OR
+	new Array(-123.28, 44.50), // Corvallis,OR
+	new Array(-123.22, 44.12), // Eugene,OR
+	new Array(-122.95, 45.53), // Hillsboro,OR
+	new Array(-121.73, 42.15), // KlamathFall,OR
+	new Array(-118.00, 45.28), // LaGrande,OR
+	new Array(-118.40, 45.50), // Meacham,OR
+	new Array(-122.87, 42.37), // Medford,OR
+	new Array(-124.05, 44.63), // Newport,OR
+	new Array(-124.25, 43.42), // NorthBend,OR
+	new Array(-117.02, 44.02), // Ontario,OR
+	new Array(-118.85, 45.68), // Pendleton,OR
+	new Array(-122.60, 45.60), // Portland,OR
+	new Array(-121.15, 44.27), // Redmond,OR
+	new Array(-123.37, 43.23), // Roseburg,OR
+	new Array(-123.00, 44.92), // Salem,OR
+	new Array(-123.37, 42.62), // Sexton,OR
+	new Array(-121.15, 45.62), // TheDalles,OR
+	new Array(-122.40, 45.55), // Troutdale,OR
+	new Array(-75.43, 40.65), // Allentown,PA
+	new Array(-78.32, 40.30), // Altoona,PA
+	new Array(-80.33, 40.75), // BeaverFalls,PA
+	new Array(-79.09, 40.27), // Blairsville,PA
+	new Array(-78.63, 41.80), // Bradford,PA
+	new Array(-78.90, 41.18), // Dubois,PA
+	new Array(-80.18, 42.08), // Erie,PA
+	new Array(-79.87, 41.38), // Franklin,PA
+	new Array(-76.85, 40.22), // Harrisburg,PA
+	new Array(-77.42, 40.37), // Harrisburg,PA
+	new Array(-78.83, 40.32), // Johnstown,PA
+	new Array(-76.30, 40.13), // Lancaster,PA
+	new Array(-79.40, 40.28), // Latrobe,PA
+	new Array(-76.77, 40.20), // Middletown,PA
+	new Array(-76.57, 40.43), // Muir,PA
+	new Array(-75.02, 40.08), // NthPhiladel,PA
+	new Array(-75.25, 39.88), // Philadelphia,PA
+	new Array(-78.13, 41.47), // Philipsburg,PA
+	new Array(-79.93, 40.35), // Pittsburgh,PA
+	new Array(-80.22, 40.50), // Pittsburgh,PA
+	new Array(-75.97, 40.38), // Reading,PA
+	new Array(-77.83, 40.85), // StateColleg,PA
+	new Array(-75.73, 41.33), // Wilkes-Barre,PA
+	new Array(-76.92, 41.25), // Williamsport,PA
+	new Array(-75.15, 40.20), // WillowGrove,PA
+	new Array(-71.58, 41.17), // BlockIsland,RI
+	new Array(-71.42, 41.60), // NthKingston,RI
+	new Array(-71.43, 41.73), // Providence,RI
+	new Array(-71.25, 41.36), // QuonsetPtNAS,RI
+	new Array(-82.72, 34.50), // Anderson,SC
+	new Array(-80.72, 32.48), // BeaufortMca,SC
+	new Array(-80.03, 32.90), // Charleston,SC
+	new Array(-81.12, 33.95), // Columbia,SC
+	new Array(-79.72, 34.18), // Florence,SC
+	new Array(-82.35, 34.85), // Greenville,SC
+	new Array(-82.22, 34.90), // Greenville,SC
+	new Array(-80.80, 33.92), // Mcentire,SC
+	new Array(-78.93, 33.68), // MyrtleBeach,SC
+	new Array(-78.72, 33.82), // NthMyrtleB,SC
+	new Array(-80.47, 33.97), // ShawAFB,SC
+	new Array(-81.96, 34.92), // Spartanburg,SC
+	new Array(-98.43, 45.45), // Aberdeen,SD
+	new Array(-96.80, 44.30), // Brookings,SD
+	new Array(-99.32, 43.75), // Chamberlain,SD
+	new Array(-103.10, 44.15), // EllsworthAf,SD
+	new Array(-98.22, 44.38), // Huron,SD
+	new Array(-98.03, 43.77), // Mitchell,SD
+	new Array(-101.60, 44.05), // Philip,SD
+	new Array(-100.28, 44.38), // Pierre,SD
+	new Array(-103.07, 44.05), // RapidCity,SD
+	new Array(-103.32, 45.16), // Redig,SD
+	new Array(-96.73, 43.58), // SiouxFalls,SD
+	new Array(-97.15, 44.92), // Watertown,SD
+	new Array(-97.38, 42.92), // Yankton,SD
+	new Array(-82.40, 36.48), // Bristol,TN
+	new Array(-85.20, 35.03), // Chattanooga,TN
+	new Array(-87.42, 36.62), // Clarksville,TN
+	new Array(-85.08, 35.95), // Crossville,TN
+	new Array(-89.40, 36.02), // Dyersburg,TN
+	new Array(-88.92, 35.60), // Jackson,TN
+	new Array(-83.98, 35.82), // Knoxville,TN
+	new Array(-90.00, 35.05), // MemphisIntl,TN
+	new Array(-89.87, 35.35), // MemphisNAS,TN
+	new Array(-85.51, 35.15), // Monteagle,TN
+	new Array(-86.68, 36.12), // Nashville,TN
+	new Array(-86.50, 36.00), // Smyrna,TN
+	new Array(-99.68, 32.42), // Abilene,TX
+	new Array(-98.03, 27.73), // Alice,TX
+	new Array(-101.70, 35.23), // Amarillo,TX
+	new Array(-97.70, 30.30), // Austin,TX
+	new Array(-97.68, 30.20), // BergstromAf,TX
+	new Array(-101.48, 32.39), // BigSky,TX
+	new Array(-101.45, 32.30), // BigSpring,TX
+	new Array(-97.43, 25.90), // Brownsville,TX
+	new Array(-98.96, 31.79), // Brownwood,TX
+	new Array(-97.43, 32.78), // CarswellAFB,TX
+	new Array(-97.67, 28.37), // ChaseNAS,TX
+	new Array(-100.28, 34.43), // Childress,TX
+	new Array(-96.37, 30.58), // CollegeStn,TX
+	new Array(-97.50, 27.77), // CorpusChrst,TX
+	new Array(-97.28, 27.70), // CorpusChrst,TX
+	new Array(-99.22, 28.45), // Cotulla,TX
+	new Array(-95.55, 30.07), // D.w.Hooks,TX
+	new Array(-102.55, 36.02), // Dalhart,TX
+	new Array(-96.97, 32.73), // DallasNAS,TX
+	new Array(-96.83, 32.97), // Dallas/Addis,TX
+	new Array(-97.03, 32.90), // Dallas/FW,TX
+	new Array(-96.85, 32.85), // Dallas/Love,TX
+	new Array(-96.87, 32.68), // Dallas/Redbr,TX
+	new Array(-100.92, 29.37), // DelRio,TX
+	new Array(-99.85, 32.43), // DyessAFB,TX
+	new Array(-106.40, 31.80), // ElPaso,TX
+	new Array(-95.17, 29.62), // EllingtonAf,TX
+	new Array(-97.35, 32.82), // FortWorth,TX
+	new Array(-97.72, 31.15), // FtHoodAaf,TX
+	new Array(-94.87, 29.27), // Galveston,TX
+	new Array(-97.83, 31.07), // GrayAFB,TX
+	new Array(-96.07, 33.07), // Greenville,TX
+	new Array(-104.80, 31.83), // GuadalupePs,TX
+	new Array(-97.67, 26.23), // Harlingen,TX
+	new Array(-99.17, 29.35), // Hondo,TX
+	new Array(-95.35, 29.97), // Houston,TX
+	new Array(-95.28, 29.65), // Houston/Hobby,TX
+	new Array(-99.77, 30.50), // Junction,TX
+	new Array(-98.58, 29.38), // KellyAFB,TX
+	new Array(-99.08, 29.98), // Kerrville,TX
+	new Array(-97.68, 31.08), // Killeen,TX
+	new Array(-97.82, 27.50), // Kingsville,TX
+	new Array(-99.47, 27.53), // LaredoIntl,TX
+	new Array(-100.78, 29.37), // LaughlinAFB,TX
+	new Array(-94.72, 32.38), // Longview,TX
+	new Array(-101.82, 33.65), // Lubbock,TX
+	new Array(-94.75, 31.23), // Lufkin,TX
+	new Array(-104.02, 30.37), // Marfa,TX
+	new Array(-98.23, 26.18), // Mcallen,TX
+	new Array(-102.18, 31.95), // Midland,TX
+	new Array(-98.07, 32.78), // MineralWlls,TX
+	new Array(-96.25, 28.72), // Palacios,TX
+	new Array(-95.45, 33.63), // Paris/Cox,TX
+	new Array(-101.71, 34.17), // Plainview,TX
+	new Array(-94.02, 30.58), // PortArthur,TX
+	new Array(-98.28, 29.53), // RandolphAFB,TX
+	new Array(-102.05, 33.60), // ReeseAFB,TX
+	new Array(-97.03, 28.08), // Rockport,TX
+	new Array(-100.50, 31.37), // SanAngelo,TX
+	new Array(-98.47, 29.53), // SanAntonio,TX
+	new Array(-98.47, 29.33), // SanAntonio,TX
+	new Array(-98.18, 32.22), // Stephenville,TX
+	new Array(-97.42, 31.15), // Temple,TX
+	new Array(-95.40, 32.37), // Tyler/Pounds,TX
+	new Array(-96.92, 28.85), // Victoria,TX
+	new Array(-97.22, 31.62), // Waco-Madison,TX
+	new Array(-98.50, 33.98), // WichitaFlls,TX
+	new Array(-103.20, 31.78), // Wink,TX
+	new Array(-113.10, 37.70), // CedarCity,UT
+	new Array(-112.93, 40.20), // DugwayPrvgr,UT
+	new Array(-111.97, 41.12), // HillAFB,UT
+	new Array(-111.85, 41.78), // Logan,UT
+	new Array(-113.03, 38.72), // Milford,UT
+	new Array(-109.75, 38.77), // Moab,UT
+	new Array(-112.02, 41.18), // Ogden,UT
+	new Array(-110.75, 39.62), // Price/Carbon,UT
+	new Array(-111.72, 40.22), // Provo,UT
+	new Array(-113.60, 37.08), // SaintGeorge,UT
+	new Array(-111.97, 40.78), // SaltLakeCt,UT
+	new Array(-109.52, 40.45), // Vernal,UT
+	new Array(-114.05, 41.22), // Wendover,UT
+	new Array(-73.15, 44.47), // Burlington,VT
+	new Array(-72.57, 44.20), // Montpelier,VT
+	new Array(-72.33, 45.55), // Newport,VT
+	new Array(-73.95, 43.53), // Rutland,VT
+	new Array(-72.88, 42.88), // Wilmington,VT
+	new Array(-78.45, 38.13), // Charlottesvi,VA
+	new Array(-79.33, 36.57), // Danville,VA
+	new Array(-77.18, 38.72), // FortBelvoir,VA
+	new Array(-76.62, 37.13), // FortEustis,VA
+	new Array(-79.82, 37.95), // HotSprings,VA
+	new Array(-76.37, 37.08), // LangleyAFB,VA
+	new Array(-79.20, 37.33), // Lynchburg,VA
+	new Array(-76.50, 37.13), // NewportNews,VA
+	new Array(-76.28, 36.93), // NorfolkNAS,VA
+	new Array(-76.20, 36.90), // NorfolkRgnl,VA
+	new Array(-76.03, 36.82), // OceanaNAS,VA
+	new Array(-77.30, 38.50), // QuanticoMca,VA
+	new Array(-77.33, 37.50), // Richmond,VA
+	new Array(-79.97, 37.32), // RoanokeMuni,VA
+	new Array(-78.85, 38.27), // Staunton,VA
+	new Array(-78.98, 36.95), // Volens,VA
+	new Array(-75.48, 37.85), // WallopsSta,VA
+	new Array(-122.53, 48.80), // Bellingham,WA
+	new Array(-122.77, 47.48), // Bremerton,WA
+	new Array(-119.52, 47.32), // Ephrata,WA
+	new Array(-122.28, 47.92), // Everet/Paine,WA
+	new Array(-117.65, 47.62), // Fairchild,WA
+	new Array(-122.58, 47.08), // FortLewis,WA
+	new Array(-119.60, 46.57), // Hanford,WA
+	new Array(-123.97, 46.97), // Hoquiam,WA
+	new Array(-122.48, 47.15), // McchordAFB,WA
+	new Array(-119.32, 47.20), // MosesLake,WA
+	new Array(-122.90, 46.97), // Olympia,WA
+	new Array(-119.12, 46.27), // Pasco,WA
+	new Array(-123.50, 48.12), // PortAngeles,WA
+	new Array(-123.67, 48.22), // PortAngeles,WA
+	new Array(-117.12, 46.75), // Pullman,WA
+	new Array(-124.55, 47.95), // Quillayute,WA
+	new Array(-122.22, 47.50), // Renton,WA
+	new Array(-122.30, 47.45), // Seattle,WA
+	new Array(-122.30, 47.53), // Seattle/Boeing,WA
+	new Array(-123.15, 47.25), // Shelton,WA
+	new Array(-117.53, 47.63), // Spokane,WA
+	new Array(-117.33, 47.67), // Spokane,WA
+	new Array(-121.33, 47.28), // StampedePas,WA
+	new Array(-122.58, 47.27), // Tacoma,WA
+	new Array(-122.80, 46.48), // Toledo,WA
+	new Array(-118.28, 46.10), // WallaWalla,WA
+	new Array(-120.20, 47.40), // Wenatchee,WA
+	new Array(-122.65, 48.35), // WhidbeyIs,WA
+	new Array(-120.53, 46.57), // Yakima,WA
+	new Array(-81.12, 37.78), // Beckley,WV
+	new Array(-81.22, 37.30), // Bluefield,WV
+	new Array(-81.60, 38.37), // Charleston,WV
+	new Array(-80.23, 39.28), // Clarksburg,WV
+	new Array(-79.85, 38.88), // Elkins,WV
+	new Array(-82.55, 38.37), // Huntington,WV
+	new Array(-80.40, 37.87), // Lewisburg,WV
+	new Array(-77.98, 39.40), // Martinsburg,WV
+	new Array(-79.92, 39.65), // Morgantown,WV
+	new Array(-81.43, 39.35), // Parkersburg,WV
+	new Array(-80.65, 40.18), // Wheeling,WV
+	new Array(-80.20, 37.46), // WhiteSulph,WV
+	new Array(-88.52, 44.25), // Appleton,WI
+	new Array(-91.48, 44.87), // EauClaire,WI
+	new Array(-88.13, 44.48), // GreenBay,WI
+	new Array(-89.03, 42.62), // Janesville,WI
+	new Array(-91.25, 43.87), // LaCrosse,WI
+	new Array(-90.18, 43.20), // LoneRock,WI
+	new Array(-89.33, 43.13), // Madison,WI
+	new Array(-87.67, 44.13), // Manitowac,WI
+	new Array(-87.90, 42.95), // Milwaukee,WI
+	new Array(-88.05, 43.12), // Milwaukee,WI
+	new Array(-89.67, 44.78), // Mosinee,WI
+	new Array(-88.53, 44.22), // Neenah,WI
+	new Array(-88.57, 44.00), // Oshkosh,WI
+	new Array(-89.45, 45.63), // Rhinelander,WI
+	new Array(-91.72, 45.48), // RiceLake,WI
+	new Array(-90.27, 43.93), // VolkFld,WI
+	new Array(-89.62, 44.92), // Wausau,WI
+	new Array(-110.10, 42.57), // BigPiney,WY
+	new Array(-106.47, 42.92), // Casper,WY
+	new Array(-104.82, 41.15), // Cheyenne,WY
+	new Array(-109.02, 44.52), // Cody,WY
+	new Array(-111.00, 41.33), // Evanston,WY
+	new Array(-105.53, 44.35), // Gillette,WY
+	new Array(-110.73, 43.60), // Jackson,WY
+	new Array(-108.73, 42.82), // Lander,WY
+	new Array(-105.68, 41.32), // Laramie,WY
+	new Array(-107.20, 41.80), // Rawlins,WY
+	new Array(-108.45, 43.05), // Riverton,WY
+	new Array(-109.07, 41.60), // RockSprings,WY
+	new Array(-106.97, 44.77), // Sheridan,WY
+	new Array(-107.97, 43.97), // Worland,WY
+	
+
+	// World cities
+	new Array(138.583, -34.917), // ADELAIDE, AUSTRALIA
+	new Array(133.883, -23.700), // ALICE SPRINGS, AUSTRALIA
+	new Array(171.750, 13.800), // APIA, SAMOA
+	new Array(174.783, -36.917), // AUCKLAND,NEW ZEALAND
+	new Array(165.483, -21.567), // BOURAIL
+	new Array(153.033, -27.467), // BRISBANE, AUSTRALIA
+	new Array(149.133, -35.283), // CANBERRA, AUSTRALIA
+	new Array(134.750, -28.933), // COOBER PEDY ,AUSTRALIA
+	new Array(130.833, -12.467), // DARWIN, AUSTRALIA
+	new Array(123.633, -17.317), // DERBY, AUSTRALIA
+	new Array(159.950, -9.467), // HONIARA, SOLOMON ISLAND
+	new Array(143.217, -19.650), // IRON RANGE
+	new Array(139.483, -20.833), // MOUNT ISA
+	new Array(177.483, -17.783), // NADI, FIJI
+	new Array(119.567, -23.333), // NEWMAN, AUSTRALIA
+	new Array(115.833, -31.933), // PERTH, AUSTRALIA
+	new Array(147.117, -9.500), // PORT MORESBY, PAPUA NEW G
+	new Array(171.233, -44.383), // TIMARU, NEW ZEALAND
+	new Array(146.800, -19.217), // TOWNSVILLE, AUSTRALIA
+	new Array(77.583, 12.967), // BANGALORE, INDIA
+	new Array(100.500, 13.733), // BANGKOK, THAILAND
+	new Array(116.433, 39.917), // BEIJING, CHINA
+	new Array(74.583, -18.933), // BOMBAY, INDIA
+	new Array(88.333, 22.500), // CALCUTTA, INDIA
+	new Array(79.867, 6.917), // COLOMBO, SRI LANKA
+	new Array(79.867, 6.917), // COLOMBO, SRI LANKA
+	new Array(77.233, 28.667), // DELHI, INDIA
+	new Array(105.867, 21.017), // HANOI, VIETNAM
+	new Array(126.683, 45.750), // HARBIN, CHINA
+	new Array(106.717, 10.767), // HO CHI MINH, VIETNAM
+	new Array(114.167, 22.250), // HONG KONG, HONG KONG
+	new Array(73.133, 33.667), // ISLAMABAD, PAKISTAN
+	new Array(106.750, -6.133), // JAKARTA, INDONESIA
+	new Array(106.750, -6.133), // JAKARTA, INDONESIA
+	new Array(106.750, -6.133), // JAKARTA, INDONESIA
+	new Array(130.533, 31.617), // KAGOSHIMA, JAPAN
+	new Array(70.183, 23.050), // KANDLA, INDIA
+	new Array(67.033, 24.850), // KARACHI, PAKISTAN
+	new Array(85.317, 27.700), // KATHMANDU, NEPAL
+	new Array(116.533, -6.050), // GUNUNGSITOLI ,INDONESIA
+	new Array(102.167, 2.550), // KOTA BHARU, MALAYSIA
+	new Array(102.167, 2.550), // KOTA KINABALU, MALAYSIA
+	new Array(101.700, 3.133), // KUALA LUMPUR, MALAYSIA
+	new Array(102.683, 25.067), // KUNMING ,CHINA
+	new Array(112.750, -7.983), // MALANG, INDONESIA
+	new Array(96.067, 21.950), // MANDALAY, MYANMAR
+	new Array(120.983, 14.583), // MANILA, PHILIPPINES
+	new Array(79.200, 21.167), // NAGPUR, INDIA
+	new Array(120.450, -6.200), // PADANG, INDONESIA
+	new Array(121.733, -8.317), // PALU, INDONESIA
+	new Array(100.467, 5.500), // PENANG ,MALAYSIA
+	new Array(109.267, -0.083), // PONTIANAK, INDONESIA
+	new Array(96.167, 16.783), // RANGOON, MYANMAR
+	new Array(141.350, 43.083), // SAPPORO, JAPAN
+	new Array(141.350, 43.083), // SAPPORO CHITOSE, JAPAN
+	new Array(141.350, 43.083), // SAPPORO OKADAMA, JAPAN
+	new Array(127.000, 37.500), // SEOUL, KOREA
+	new Array(121.367, 31.100), // SHANGHAI, CHINA
+	new Array(103.833, 1.300), // SINGAPORE, SINGAPORE
+	new Array(131.283, -0.833), // SORONG, INDONESIA
+	new Array(140.300, -6.133), // TANAHMERAH, INDONESIA
+	new Array(121.533, 25.083), // TAIPEI, TAIWAN
+	new Array(89.717, 27.533), // THIMBU ,BHUTAN
+	new Array(139.750, 35.667), // TOKYO, JAPAN
+	new Array(139.750, 35.667), // HANEDA-TOKYO, JAPAN
+	new Array(139.750, 35.667), // NARITA-TOKYO, JAPAN
+	new Array(93.900, 46.317), // TONHIL
+	new Array(106.867, 47.900), // ULAANBAATAR ,MONGOLIA
+	new Array(87.633, 43.717), // URUMQI, CHINA
+	new Array(108.900, 30.583), // WUHAN, CHINA
+	new Array(108.900, 34.267), // XIAN XIGUAN ,CHINA
+	new Array(108.900, 34.267), // XIAN XIANYANG ,CHINA
+	new Array(97.717, 39.900), // YUMEN
+	new Array(177.833, 64.833), // ANADYR ,RUSSIAN FED
+	new Array(40.667, 64.533), // ARKHANGELSK ,RUSSIAN FED
+	new Array(58.400, 37.967), // ASHKHABAD, TURKMENIS
+	new Array(49.883, 40.367), // BAKU, AZERBAIJAN
+	new Array(83.750, 53.350), // BARNAUL ,E URAL RUSSIA
+	new Array(113.583, 52.050), // CHITA, RUSSIA
+	new Array(86.550, 67.517), // IGARKA ,E URAL RUSSIA
+	new Array(107.667, 63.250), // INARIGDA
+	new Array(80.967, 59.117), // KARGASOK
+	new Array(102.517, 71.983), // KHATANGA
+	new Array(30.717, 50.417), // KIEV BORISPOL, UKRAINE
+	new Array(30.717, 50.417), // KIEV ZHULHANY, UKRAINE
+	new Array(39.000, 45.033), // KRASNODAR, RUSSIA
+	new Array(125.733, 53.450), // MAGDAGACHI ,RUSSIAN FED
+	new Array(37.700, 55.750), // MOSCOW, RUSSIA
+	new Array(37.700, 55.750), // MOSCOW, RUSSIA
+	new Array(37.700, 55.750), // MOSCOW, RUSSIA
+	new Array(37.700, 55.750), // MOSCOW-VKO, RUSSIA
+	new Array(143.250, 59.333), // OKHOTSK
+	new Array(56.167, 58.017), // PERM ,RUSSIAN FED
+	new Array(69.217, 54.883), // PETROPAVLOVSK ,KAZAKHSTAN
+	new Array(106.167, 56.667), // RIGA SKULTE, LATVIA
+	new Array(106.167, 56.667), // RIGA SPILVE, LATVIA
+	new Array(45.917, 51.500), // SARATOV ,RUSSIAN FED
+	new Array(69.217, 41.267), // TASHKENT, UZBEKISTAN
+	new Array(100.583, 54.533), // TULUN
+	new Array(140.233, 49.083), // VANINO
+	new Array(131.883, 43.150), // VLADIVOSTOK, RUSSIA
+	new Array(64.000, 67.450), // VORKUTA ,RUSSIAN FED
+	new Array(129.833, 62.167), // YAKUTSK ,E URAL RUSSIA
+	new Array(48.000, 29.333), // KUWAIT, KUWAIT
+	new Array(46.767, 24.650), // RIYADH, SAUDI ARABIA
+	new Array(44.433, 33.333), // BAGHDAD SADDAM, IRAQ
+	new Array(44.433, 33.333), // BAGHDAD, IRAQ
+	new Array(57.933, 36.950), // BAM
+	new Array(37.167, 36.233), // HALAB
+	new Array(62.200, 34.333), // HERAT, AFGHANISTAN
+	new Array(35.217, 31.783), // JERUSALEM, ISRAEL
+	new Array(69.200, 34.517), // KABUL, AFGHANISTAN
+	new Array(59.567, 36.267), // MASHAD ,IRAN
+	new Array(57.550, 22.933), // NAZWA
+	new Array(54.067, 17.000), // SALALAH, OMAN
+	new Array(44.233, 15.400), // SANAA, YEMEN
+	new Array(52.567, 29.633), // SHIRAZ, IRAN
+	new Array(46.300, 38.083), // TABRIZ, IRAN
+	new Array(45.967, 16.133), // TARIM
+	new Array(51.433, 35.667), // TEHRAN, IRAN
+	new Array(0.083, -5.317), // ABIDJAN, IVORY COAST
+	new Array(15.950, -23.717), // AD DAKHLA
+	new Array(38.700, 9.050), // ADDIS ABABA ,ETHIOPIA
+	new Array(3.000, 36.833), // ALGIERS, ALGERIA
+	new Array(47.500, -18.867), // ANTANANARIVO, MADAGA
+	new Array(38.967, 15.333), // ASMARA ,ERITREA
+	new Array(32.933, 24.083), // ASWAN, EGYPT
+	new Array(8.000, -12.650), // BAMAKO, MALI
+	new Array(20.067, 32.117), // BENGHAZI ,LIBYA
+	new Array(18.583, 4.367), // BANGUI, AFRICA
+	new Array(34.867, -19.817), // BEIRA, MOZAMBIQUE
+	new Array(31.250, 30.050), // CAIRO, EGYPT
+	new Array(18.367, -35.917), // CAPETOWN, SOUTH AFRICA
+	new Array(17.433, -14.667), // DAKAR, SENEGAL
+	new Array(5.000, -34.083), // FES
+	new Array(13.250, -8.500), // FREETOWN, SIERRA LEON
+	new Array(31.500, -17.833), // HARARE, ZIMBABWE
+	new Array(28.417, -14.483), // KABWE
+	new Array(35.417, 0.317), // KAMPALA ,UGANDA
+	new Array(8.517, 12.000), // KANO, NIGERIA
+	new Array(32.533, 15.600), // KHARTOUM, SUDAN
+	new Array(15.300, -4.300), // KINSHASA NDJILI, ZAIRE
+	new Array(15.300, -4.300), // KINSHASA NDOLO, ZAIRE
+	new Array(25.233, 0.550), // KISANGANI, ZAIRE
+	new Array(3.400, 6.450), // LAGOS, NIGERIA
+	new Array(15.450, -28.133), // LAS PALMAS DE GC
+	new Array(39.683, -10.000), // LINDI, TANZANIA
+	new Array(13.567, -12.333), // LOBITO
+	new Array(1.217, 6.133), // LOME, TOGO
+	new Array(27.483, -11.683), // LUBUMBASHI, ZAIRE
+	new Array(15.167, -26.633), // LUDERITZ, SOUTH AFRICA
+	new Array(23.433, -4.983), // LUZAMBA ,ANGOLA
+	new Array(32.583, -25.967), // MAPUTO ,MOZAMBIQUE
+	new Array(27.483, -29.317), // MASERU, LESOTHO
+	new Array(34.200, 1.067), // MBALA ,ZAMBIA
+	new Array(45.350, 2.033), // MOGADISHU, SOMALIA
+	new Array(10.783, -6.300), // MONROVIA, LIBERIA
+	new Array(10.783, -6.300), // MONROVIA, LIBERIA
+	new Array(26.717, -7.850), // MWANZA, TANZANIA
+	new Array(14.983, 12.167), // NDJAMENA ,CHAD
+	new Array(36.817, -1.283), // NAIROBI, KENYA
+	new Array(36.817, -1.283), // NAIROBI, KENYA
+	new Array(12.150, -15.167), // NAMIBE, ANGOLA
+	new Array(15.967, -18.150), // NOUAKCHOTT, MAURITANIA
+	new Array(1.517, -12.367), // OUAGADOUGOU, BURKINA
+	new Array(11.883, -4.767), // POINTE NOIRE, CONGO
+	new Array(25.600, -33.967), // PORT ELIZABETH,SOUTH AFRICA
+	new Array(14.433, 27.033), // SEBHA ,LIBYA
+	new Array(26.733, -22.417), // SERONERA ,TANZANIA
+	new Array(10.200, -29.400), // SIDI IFNI ,MOROCCO
+	new Array(43.683, -23.333), // TULEAR ,MADAGASCAR
+	new Array(2.983, -16.817), // TOMBOUCTOU ,MALI
+	new Array(13.183, 32.900), // TRIPOLI, LIBYA
+	new Array(17.700, -19.217), // TSUMEB, NAMIBIA
+	new Array(10.183, 36.800), // TUNIS, TUNISIA
+	new Array(17.100, -22.567), // WINHOEK
+	new Array(11.517, 3.867), // YAOUNDE, CAMEROON
+	new Array(39.333, -6.167), // ZANZIBAR, TANZANIA
+	new Array(23.717, 37.967), // ATHENS, GREECE
+	new Array(2.183, 41.383), // BARCELONA, SPAIN
+	new Array(7.433, 46.950), // BERNE, SWITZERLAND
+	new Array(0.567, -44.833), // BORDEAUX, FRANCE
+	new Array(16.667, 49.217), // BRNO, CZECHOSLOVAKIA
+	new Array(26.100, 44.433), // BUCHAREST, ROMANIA
+	new Array(26.100, 44.433), // BANEASA BUCHARE, ROMANIA
+	new Array(26.100, 44.433), // OTOPENI BUCHARE, ROMANIA
+	new Array(19.083, 47.500), // BUDAPEST ,HUNGARY
+	new Array(8.467, -51.900), // CORK, IRELAND
+	new Array(18.667, 54.383), // GDANSK, POLAND
+	new Array(4.250, -55.883), // GLASGOW, UK
+	new Array(9.983, 53.550), // HAMBURG, GERMANY
+	new Array(28.967, 41.017), // ISTANBUL, TURKEY
+	new Array(0.167, -51.500), // HEATHROW-LONDON, UK
+	new Array(15.667, 78.200), // LONGYEARBYEN, NORWAY
+	new Array(3.683, -40.400), // MADRID, SPAIN
+	new Array(14.283, 40.850), // NAPLES, ITALY
+	new Array(7.250, 43.700), // NICE, FRANCE
+	new Array(53.000, -71.500), // NUUGAATSIAQ
+	new Array(10.750, 59.917), // OSLO, NORWAY
+	new Array(2.333, 48.867), // PARIS, FRANCE
+	new Array(2.337, 48.837), // CHARLES DE GAULLE
+	new Array(21.850, -64.150), // REYKJAVIK, ICELAND
+	new Array(12.600, 41.800), // ROME, ITALY
+	new Array(22.000, -70.500), // SCORESBYSUND, GREENLAND
+	new Array(17.167, 65.083), // STENSELE
+	new Array(18.050, 59.333), // STOCKHOLM, SWEDEN
+	new Array(68.500, -76.583), // THULE, GREENLAND
+	new Array(6.783, -62.033), // TORSHAVN
+	new Array(39.717, 41.000), // TRABZON, TURKEY
+	new Array(20.333, 60.267), // VARDOE ,NORWAY
+	new Array(70.383, 23.667), // ANTOFAGASTA, CHILE
+	new Array(71.533, 16.417), // AREQUIPA, PERU
+	new Array(48.483, 1.450), // BELEM, BRAZIL
+	new Array(74.083, -4.600), // BOGOTA, COLOMBIA
+	new Array(47.917, 15.783), // BRASILIA, BRAZIL
+	new Array(66.933, -10.500), // CARACAS, VENEZUELA
+	new Array(52.333, -4.933), // CAYENNE, FRENCH GUIANA
+	new Array(106.100, -28.667), // CHIHUAHUA, MEXICO
+	new Array(94.000, -58.750), // CHURCHILL, CANADA
+	new Array(67.500, 45.833), // COMODORO, ARGENTINA
+	new Array(115.350, -67.817), // COPPERMINE, CANADA
+	new Array(96.917, -18.917), // CORDOBA, ARGENTINA
+	new Array(58.417, 7.250), // CUIABA, BRAZIL
+	new Array(134.833, -67.483), // FT MCPHERSON, CANADA
+	new Array(117.667, -61.050), // FT PROVIDENCE
+	new Array(58.167, -6.800), // GEORGETOWN, GUYANA
+	new Array(103.333, -20.667), // GUADALAJARA ,MEXICO
+	new Array(75.233, -20.150), // GUANTANAMO, CUBA
+	new Array(90.517, -14.633), // GUATEMALA CITY, GUATEMALA
+	new Array(79.833, 2.167), // GUAYAQUIL, ECUADOR
+	new Array(127.633, -55.250), // HAZELTON,BC,CANADA
+	new Array(39.100, 14.833), // ILHEUS, BRAZIL
+	new Array(73.217, 3.850), // IQUITOS, PERU
+	new Array(82.367, -23.133), // HAVANA ,CUBA
+	new Array(66.867, -52.933), // LABRADOR CITY,CANADA
+	new Array(77.050, 12.050), // LIMA, PERU
+	new Array(86.300, -12.100), // MANAGUA, NICARAGUA
+	new Array(60.000, 3.100), // MANAUS, BRAZIL
+	new Array(71.133, -8.400), // MERIDA, VENEZUELA
+	new Array(56.183, 34.883), // MONTEVIDEO, URUGUAY
+	new Array(132.800, -59.200), // NAKINA, CANADA
+	new Array(79.533, -8.967), // PANAMA CITY, PANAMA
+	new Array(79.533, -8.967), // PANAMA CITY, PANAMA
+	new Array(117.300, -56.250), // PEACE RIVER, CANADA
+	new Array(72.333, -18.533), // PORT AU PRINCE ,HAITI
+	new Array(63.900, 8.750), // PORTO VELHO, BRAZIL
+	new Array(71.250, -46.833), // QUEBEC, CANADA
+	new Array(34.883, 8.100), // RECIFE, BRAZIL
+	new Array(43.233, 22.900), // RIO DE JANEIRO ,BRAZIL
+	new Array(43.233, 22.900), // RIO DE JANEIRO ,BRAZIL
+	new Array(43.233, 22.900), // RIO DE JANEIRO ,BRAZIL
+	new Array(66.117, -18.467), // SAN JUAN, PUERTO RICO
+	new Array(54.683, 2.433), // SANTAREM, BRAZIL
+	new Array(46.617, 23.533), // SAO PAULO, BRAZIL
+	new Array(46.617, 23.533), // SAO PAULO, BRAZIL
+	new Array(46.617, 23.533), // SAO PAULO, BRAZIL
+	new Array(101.533, -52.167), // SASKATOON, CANADA
+	new Array(117.017, -32.533), // TIJUANA, MEXICO
+	new Array(79.383, -43.650), // TORONTO, CANADA
+	new Array(79.383, -43.650), // TORONTO, CANADA
+	new Array(50.900, 21.267), // VALPARAISO, BRAZIL
+	new Array(123.117, -49.267), // VANCOUVER, BC, CANADA
+	new Array(123.117, -49.267), // VANCOUVER, CANADA
+	new Array(96.133, -19.200), // VERACRUZ, MEXICO
+	new Array(135.050, -60.717), // WHITEHORSE, CANADA
+	new Array(97.150, -49.883), // WINNIPEG, CANADA
+	new Array(170.000, 14.333), // AMERICAN SAMOA
+	new Array(176.467, -0.200), // BAKER ISLAND(US)
+	new Array(109.333, 27.083), // EASTER ISLAND, CHILE
+	new Array(135.000, 23.167), // GAMBIER ISLAND, FRENCH GUY
+	new Array(157.850, -21.300), // HONOLULU, HI
+	new Array(176.633, -0.800), // HOWLAND ISLAND(US)
+	new Array(160.033, 0.033), // JARVIS ISLAND
+	new Array(171.667, 2.833), // KANTON ISLAND
+	new Array(159.383, -21.983), // LIHUE KAUAI, HI
+	new Array(162.083, -5.867), // PALMYRA ISLAND
+	new Array(130.100, 25.067), // PITCAIRN ISLAND(UK)
+	new Array(100.000, 59.500), // SWAINS ISLAND
+		
+
+	new Array(126.977969, 37.566535), // Tokyo, Japan
+
+	new Array(-95.677068, 37.0625), // Seoul, Korea
+
+
+	
+	
+	new Array(0, 0)	
+);
+
+
+
+</script>
+</head>
+<body onload="boom()">
+
+<div style="width:100%;height:95%;overflow:scroll;">
+<iframe id="googlemaps" width="2048" height="1600" frameborder="0" 
+scrolling="no" marginheight="0" marginwidth="0"
+src=""></iframe>
+</div>
+
+<input type="button" value="Boom" onclick="boom()"/>
+<input type="button" value="Toggle Timer" onclick="timer = timer ? false : true;"/>
+<div id="status-label"></div>
+
+</body>
+</html>

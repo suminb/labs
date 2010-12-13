@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Vehicle Compatibility Test {% endblock %}
+{% block stylesheet %}
+<style type="text/css">
+form ul {
+    padding: 0;
+}
+form li {
+    margin: 1em 0 1em 0;
+}
+form h3 {
+    margin: 0 0 4px 0;
+}
+form .description {
+    color: gray;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<h1>Vehicle Compatibility Test</h1>
+
+The more accurate your answers are, the better matches we can find you.
+
+<form method="post">
+    <ul>
+        {{ form.non_field_errors }}
+        <li>
+            <h3>How old are you?</h3>
+            {{ form.age.errors }}
+            <div class="description">Be honest</div>
+            {{ form.age }}
+        </li>
+        <li>
+            <h3>What kind of phone do you own?</h3>
+            {{ form.type_of_phone.errors }}
+            {{ form.type_of_phone }}
+        </li>
+        <li>
+            <h3>Your gender</h3>
+            {{ form.gender.errors }}
+            <div class="description">In social and cultural aspects rather than biological ones</div>
+            {{ form.gender }}
+        </li>
+        <li>
+            <h3>Annual income</h3>
+            {{ form.income.errors }}
+            <div class="description">Your estimated annual income after tax</div>
+            {{ form.income }}
+        </li>
+    </ul>
+    <p><input type="submit" value="Submit" /></p>
+</form>
+
+Note: There is no explicit privacy policy because we do not collect identifiable personal information such as your name and email address.
+
+{% endblock %}

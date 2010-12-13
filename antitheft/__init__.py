@@ -1,0 +1,1 @@
+GUID = 'us.sumin.labs.antitheft'
