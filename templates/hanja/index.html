@@ -16,8 +16,8 @@
 	        if(json.status == 'ok') {
 	        	$('#console-result').text(json.payload);
 	        	
-	        	//var url = 'http://labs.suminb.com/hanja?q=' + escape($('#query').val());
-	        	var url = window.location.href;
+	        	var url = 'http://labs.suminb.com/hanja?q=' + escape($('#query').val());
+	        	//var url = window.location.href;
 	        	$('#console-url').html($.sprintf('<a href="%s">%s</a>', url, url));
 	        }
 	        else {
