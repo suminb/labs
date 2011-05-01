@@ -71,6 +71,8 @@ div#content {
 
 div#footer {
     clear: both;
+}
+div#footer #copyright {
     margin-top: 8px;
 	padding: 8px;
 	-moz-border-radius: 4px;
@@ -79,6 +81,9 @@ div#footer {
 	font-size: 0.9em;
 	text-align: center;
 	color: #888;
+}
+div#footer #share {
+    margin-left: 310px;
 }
 div#footer a {
 	color: #888;
