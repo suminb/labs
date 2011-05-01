@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 {% block title %} Labs :: 한자-한글 변환기 {% endblock %}
+{% block metatags %}
+    <meta property="og:title" content="Labs :: 한자-한글 변환기"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://labs.suminb.com/hanja"/>
+    <meta property="og:image" content="http://labs.suminb.com/static/images/chinese_beauty_128.png"/>
+    <meta property="og:site_name" content="labs.suminb.com"/>
+    <meta property="fb:admins" content="10132775"/>
+    <meta property="og:description" content="Leading cutting-edge research projects and dealing with highly classifed materials."/>
+{% endblock %}
 {% block javascript %}
 	<script type="text/javascript" src="/static/jquery.js"></script>
 	<script type="text/javascript" src="/static/jquery.printf.js"></script>
@@ -32,6 +41,7 @@
 	        	var url = 'http://labs.suminb.com/hanja?q=' + encodeURI($('#query').val());
 	        	//var url = window.location.href;
 	        	$('#console-url').html($.sprintf('<a href="%s">%s</a>', url, url));
+	        	$('meta[property=og:url]').attr('content', url);
 	        }
 	        else {
 	        	$('#console').text(json.message);

@@ -1,3 +1,5 @@
+ # -*- coding: utf-8
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 
@@ -6,7 +8,8 @@ from hanja.dict import *
 
 def index(request):
     r = request.REQUEST
-    return render_to_response('hanja/index.html', {'query': r['q']} if 'q' in r else '')
+    return render_to_response('hanja/index.html',
+        {'query': r['q']} if 'q' in r else '')
 
 def lookup(request):
     if 'q' in request.REQUEST:
