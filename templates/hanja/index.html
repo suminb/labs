@@ -5,10 +5,23 @@
 	<script type="text/javascript" src="/static/jquery.printf.js"></script>
 	<script type="text/javascript">
 	window.onload = function() {
-        if($('#query').val()) {
+	    var query = getParameterByName('q');
+        if(query) {
+            $('#query').val(decodeURI(query));
             lookup();
         }
 	};
+	
+	function getParameterByName( name ) {
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( window.location.href );
+        if( results == null )
+            return "";
+        else
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
 	
 	function lookup() {
 	    $.post('/hanja/lookup', {'q': $('#query').val()}, function(json) {
@@ -16,7 +29,7 @@
 	        if(json.status == 'ok') {
 	        	$('#console-result').text(json.payload);
 	        	
-	        	var url = 'http://labs.suminb.com/hanja?q=' + escape($('#query').val());
+	        	var url = 'http://labs.suminb.com/hanja?q=' + encodeURI($('#query').val());
 	        	//var url = window.location.href;
 	        	$('#console-url').html($.sprintf('<a href="%s">%s</a>', url, url));
 	        }
@@ -34,7 +47,7 @@
     <h1>한자-한글 변환기</h1>
 
 	<form method="post" action="/hanja/lookup" onsubmit="return lookup()">
-		<textarea id="query" name="q" style="width:99%; height:200px;">{{ query }}</textarea>
+		<textarea id="query" name="q" style="width:99%; height:200px;"></textarea>
 		<div class="align-right">
 			<input type="submit" value="Convert"/>
 		</div>
