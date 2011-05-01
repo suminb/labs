@@ -5,12 +5,12 @@ from lib.frontend import *
 from hanja.dict import *
 
 def index(request):
-    return render_to_response('hanja/index.html', {})
+    r = request.REQUEST
+    return render_to_response('hanja/index.html', {'query': r['q']} if 'q' in r else '')
 
 def lookup(request):
-    if request.method == 'POST':
-        post = request.POST
-        query = post['query']
+    if 'q' in request.REQUEST:
+        query = request.REQUEST['q']
         result = ''.join(map(lambda x: table[x] if x in table else x, query))
 
         return response_ok(result)
