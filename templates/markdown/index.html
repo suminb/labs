@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: Markdown {% endblock %}
+{% block metatags %}
+    <meta property="og:title" content="Labs :: Markdown"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://labs.suminb.com/markdown"/>
+    <meta property="og:image" content="http://labs.suminb.com/static/images/chinese_beauty_128.png"/>
+    <meta property="og:site_name" content="labs.suminb.com"/>
+    <meta property="fb:admins" content="10132775"/>
+    <meta property="og:description" content="Leading cutting-edge research projects and dealing with highly classifed materials."/>
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/jquery.printf.js"></script>
+	<script type="text/javascript">
+	window.onload = function() {
+        if($('#query').val()) {
+        }
+	};
+	
+	function getParameterByName( name ) {
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( window.location.href );
+        if( results == null )
+            return "";
+        else
+            return decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+	
+	function lookup() {
+	    $.post('/markdown/lookup', {'q': $('#query').val()}, function(json) {
+	    	$('#console').removeClass('hidden').removeClass('error');
+	        if(json.status == 'ok') {
+	        	$('#console-result').html(json.payload.result);
+	        	
+	        	var url = 'http://labs.suminb.com/markdown/' + json.payload.id;
+	        	//var url = window.location.href;
+	        	$('#console-url').html($.sprintf('<a href="%s">%s</a>', url, url));
+	        	$('meta[property=og:url]').attr('content', url);
+	        }
+	        else {
+	            $('#console').addClass('error');
+	        	$('#console').text(json.message);
+	        }
+	    }, 'json')
+	    .error(function() {
+	        $('#console').removeClass('hidden').addClass('error');
+    	    $('#console').text('HTTP 500: Internal Server Error.');
+	    });
+
+	    return false;
+	}
+	</script>
+{% endblock %}
+
+{% block content %}
+    <h1>Markdown</h1>
+
+	<form method="post" action="/markdown/lookup" onsubmit="return lookup()">
+		<textarea id="query" name="q" style="width:99%; height:200px;">{{ document.content }}</textarea>
+		<div class="align-right">
+			<input type="submit" value="Convert"/>
+		</div>
+	</form>
+	
+	<div id="console" class="hidden">
+	    <h3>Result</h3>
+	    <p id="console-result" class="result" style="white-space: normal"></p>
+	    
+	    <h3>URL to this page</h3>
+	    <p id="console-url"></p>
+	</div>
+{% endblock %}
