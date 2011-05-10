@@ -3,10 +3,11 @@ from django.shortcuts import render_to_response
 
 from models import *
 
+from lib.util import Base62
 from lib.frontend import *
 from lib.markdown2 import markdown
 
-def index(request, id=0):
+def index(request, id='0'):
     r = request.REQUEST
     
     return render_to_response('markdown/index.html', {
@@ -25,10 +26,10 @@ def lookup(request):
             
             id = document.key().id()
             
-        return response_ok({'id':id, 'result':result})
+        return response_ok({'id':Base62.encode(id), 'result':result})
     elif 'id' in request.REQUEST:
         id = request.REQUEST['id']
-        document = MarkdownDocument.get_by_id(int(id))
+        document = MarkdownDocument.get_by_id(Base62.decode(id))
         rendered = markdown(document.content, extras=('footnotes', 'code-color',))
         
         return response_ok({'id':id, 'raw':document.content, 'rendered':rendered})

@@ -28,8 +28,26 @@
         }
     };
     
+    /**
+     * Needs to be refactored
+     */
+    function encodeBase62(value) {
+    console.log(value);
+        digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        
+        var stack = new Array();
+        while(value > 0) {
+            remainder = value % 62;
+            value = value / 62;
+            
+            stack.push(digits[remainder])
+        }
+        
+        return stack.reverse().join("");
+    }
+    
     function generateURL(id) {
-        return 'http://labs.suminb.com/markdown/' + id;
+        return 'http://labs.suminb.com/markdown/docs/' + id;
     }
     
     function displayResult(rendered, url) {

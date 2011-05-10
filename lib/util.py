@@ -17,7 +17,7 @@ class Base62:
             remainder = value % Base62.base
             value = value / Base62.base
             
-            stack.append(str(Base62.digits[remainder]))
+            stack.append(Base62.digits[remainder])
             
         stack.reverse()
         return "".join(stack)
