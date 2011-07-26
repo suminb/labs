@@ -15,6 +15,7 @@ urlpatterns = patterns('',
  
     (r'^$', 'default.views.index'),
     (r'^sponsors/?', 'default.views.sponsors'),
+    (r'^webthumb/?', 'webthumb.views.resize'),
     
     #(r'^projectstatus/?', include('projectstatus.urls')),
 

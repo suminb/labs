@@ -7,9 +7,10 @@ from lib.frontend import *
 from hanja.dict import *
 
 def index(request):
-    r = request.REQUEST
-    return render_to_response('hanja/index.html',
-        {'query': r['q']} if 'q' in r else '')
+    return HttpResponseRedirect('http://hanja.suminb.com')
+#    r = request.REQUEST
+#    return render_to_response('hanja/index.html',
+#        {'query': r['q']} if 'q' in r else '')
 
 def lookup(request):
     if 'q' in request.REQUEST:
