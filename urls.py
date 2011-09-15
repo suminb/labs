@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.views.generic.simple import redirect_to
 from django.conf import settings
 
 import os
@@ -20,7 +21,8 @@ urlpatterns = patterns('',
     #(r'^projectstatus/?', include('projectstatus.urls')),
 
     (r'^antitheft/?', include('antitheft.urls')),
-    (r'^cambridge/?', include('cambridge.urls')),
+    (r'^cambridge/?', redirect_to, {'url': '/cmabridge'}),
+    (r'^cmabridge/?', include('cmabridge.urls')),
     (r'^chemtalk/?', include('chemtalk.urls')),
     (r'^cognitive/?', include('cognitive.urls')),
     (r'^finance/?', include('finance.urls')),

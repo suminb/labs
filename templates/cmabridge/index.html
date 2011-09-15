@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block title %} Labs :: 캠릿브지 {% endblock %}
 {% block metatags %}
-    <meta property="og:title" content="Labs :: Cambridge"/>
+    <meta property="og:title" content="Labs :: Cmabridge"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="http://labs.suminb.com/cambridge"/>
+    <meta property="og:url" content="http://labs.suminb.com/cmabridge"/>
     <meta property="og:image" content="http://labs.suminb.com/static/images/question_mark_128.png"/>
     <meta property="og:site_name" content="labs.suminb.com"/>
     <meta property="fb:admins" content="10132775"/>
@@ -44,7 +44,7 @@
     }
     
     function generateURL(query) {
-        return window.location.origin + "/cambridge#q=" + $.base64Encode(query);
+        return window.location.origin + "/cmabridge#q=" + $.base64Encode(query);
     }
     
     function displayResult(rendered, url) {
@@ -63,7 +63,7 @@
     
     function translate() {
         var query = $('#query').val();
-        $.get('/cambridge/translate', {'q': query}, function(json) {
+        $.get('/cmabridge/translate', {'q': query}, function(json) {
             if(json.status == 'ok') {
                 displayResult(json.payload.result, generateURL(query));
             }
@@ -92,7 +92,7 @@
     
     <p>{{ description }}</p>
 
-    <form method="get" action="/cambridge/translate" onsubmit="return translate()">
+    <form method="get" action="/cmabridge/translate" onsubmit="return translate()">
         <textarea id="query" name="q" style="width:99%; height:200px;"></textarea>
         <div class="align-right">
             <input type="submit" value="Translate"/>
