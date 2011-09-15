@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %} Labs :: 캠릿브지 {% endblock %}
+{% block metatags %}
+    <meta property="og:title" content="Labs :: Cambridge"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://labs.suminb.com/cambridge"/>
+    <meta property="og:image" content="http://labs.suminb.com/static/images/markdown_128.png"/>
+    <meta property="og:site_name" content="labs.suminb.com"/>
+    <meta property="fb:admins" content="10132775"/>
+    <meta property="og:description" content=""/>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/jquery.printf.js"></script>
+    <script type="text/javascript">
+    window.onload = function() {
+        var id = '{{ id }}';
+        if(id != 'None') {
+            $.post('/markdown/lookup', {'id': id}, function(json) {
+                if(json.status == 'ok') {
+                    $('#query').val(json.payload.raw);
+                    displayResult(json.payload.rendered, generateURL(id));
+                }
+            }, 'json')
+            .error(function() {
+                displayErrorMessage('Could not find document.');
+            });
+        }
+    };
+    
+    /**
+     * Needs to be refactored
+     */
+    function encodeBase62(value) {
+    console.log(value);
+        digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        
+        var stack = new Array();
+        while(value > 0) {
+            remainder = value % 62;
+            value = value / 62;
+            
+            stack.push(digits[remainder])
+        }
+        
+        return stack.reverse().join("");
+    }
+    
+    function generateURL(id) {
+        return 'http://labs.suminb.com/markdown/docs/' + id;
+    }
+    
+    function displayResult(rendered, url) {
+        $('#console').removeClass('hidden').removeClass('error');
+        
+        $('#console-result').html(rendered);
+        
+        $('#console-url').html($.sprintf('<a href="%s">%s</a>', url, url));
+        $('meta[property=og:url]').attr('content', url);
+    }
+    
+    function displayErrorMessage(message) {
+        $('#console').removeClass('hidden').addClass('error');
+        $('#console').html(message);
+    }
+    
+    function lookup() {
+        $.post('/markdown/lookup', {'q': $('#query').val()}, function(json) {
+            if(json.status == 'ok') {
+                displayResult(json.payload.result, generateURL(json.payload.id));
+            }
+            else {
+                $('#console').addClass('error');
+                $('#console').text(json.message);
+            }
+        }, 'json')
+        .error(function() {
+            displayErrorMessage('HTTP 500: Internal Server Error.');
+        });
+
+        return false;
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h1>캠릿브지</h1>
+    
+    <p>캠릿브지 대학의 연결구과에 따르면, 한 단어 안에서 글자가 어떤 순서로 배되열어
+있는가 하것는은 중하요지 않고, 첫째번와 마지막 글자가 올바른 위치에 있것는이 
+중하요다고 한다. 나머지 글들자은 완전히 엉진창망의 순서로 되어 있지을라도 
+당신은 아무 문없제이 이것을 읽을 수 있다. 왜하냐면 인간의 두뇌는 모든 글자를 
+하나 하나 읽것는이 아니라 단어 하나를 전체로 인하식기 때이문다.</p>
+    
+    <p>{{ description }}</p>
+
+    <form method="post" action="/markdown/lookup" onsubmit="return lookup()">
+        <textarea id="query" name="q" style="width:99%; height:200px;"></textarea>
+        <div class="align-right">
+            <input type="submit" value="Translate"/>
+        </div>
+    </form>
+    
+    <div id="console" class="hidden">
+        <p id="console-result" class="result" style="white-space: normal"></p>
+        
+        <h3>URL to this page</h3>
+        <p id="console-url"></p>
+    </div>
+{% endblock %}

@@ -85,3 +85,9 @@ INSTALLED_APPS = (
 )
 
 APPEND_SLASH = False
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': '',
+#    }
+#}
