@@ -4,50 +4,47 @@
     <meta property="og:title" content="Labs :: Cambridge"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="http://labs.suminb.com/cambridge"/>
-    <meta property="og:image" content="http://labs.suminb.com/static/images/markdown_128.png"/>
+    <meta property="og:image" content="http://labs.suminb.com/static/images/question_mark_128.png"/>
     <meta property="og:site_name" content="labs.suminb.com"/>
     <meta property="fb:admins" content="10132775"/>
-    <meta property="og:description" content=""/>
+    <meta property="og:description" content="캠릿브지 대학의 연결구과에 따르면, 한 단어 안에서 글자가 어떤 순서로 배되열어 있는가 하것는은 중하요지 않고, 첫째번와 마지막 글자가 올바른 위치에 있것는이 중하요다고 한다. 나머지 글들자은 완전히 엉진창망의 순서로 되어 있지을라도 당신은 아무 문없제이 이것을 읽을 수 있다. 왜하냐면 인간의 두뇌는 모든 글자를 하나 하나 읽것는이 아니라 단어 하나를 전체로 인하식기 때이문다."/>
 {% endblock %}
 {% block javascript %}
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
     <script type="text/javascript" src="/static/jquery.printf.js"></script>
+    <script type="text/javascript" src="/static/jquery.base64.js"></script>
     <script type="text/javascript">
     window.onload = function() {
-        var id = '{{ id }}';
-        if(id != 'None') {
-            $.post('/markdown/lookup', {'id': id}, function(json) {
-                if(json.status == 'ok') {
-                    $('#query').val(json.payload.raw);
-                    displayResult(json.payload.rendered, generateURL(id));
-                }
-            }, 'json')
-            .error(function() {
-                displayErrorMessage('Could not find document.');
-            });
+        // The following code was copied from
+        // http://stackoverflow.com/questions/2161906/handle-url-anchor-change-event-in-js
+        if ("onhashchange" in window) { // event supported?
+            window.onhashchange = function () {
+                hashChanged(window.location.hash);
+            }
         }
+        else { // event not supported:
+            var storedHash = window.location.hash;
+            window.setInterval(function () {
+                if (window.location.hash != storedHash) {
+                    storedHash = window.location.hash;
+                    hashChanged(storedHash);
+                }
+            }, 100);
+        }
+        
+        hashChanged(window.location.hash ? window.location.hash : "");
     };
     
-    /**
-     * Needs to be refactored
-     */
-    function encodeBase62(value) {
-    console.log(value);
-        digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        
-        var stack = new Array();
-        while(value > 0) {
-            remainder = value % 62;
-            value = value / 62;
-            
-            stack.push(digits[remainder])
+    function hashChanged(hash) {
+        console.log(hash);
+        if(hash.match(/^#q=/)) {
+            $("#query").val($.base64Decode(hash.substring(3)));
+            translate();
         }
-        
-        return stack.reverse().join("");
     }
     
-    function generateURL(id) {
-        return 'http://labs.suminb.com/markdown/docs/' + id;
+    function generateURL(query) {
+        return window.location.origin + "/cambridge#q=" + $.base64Encode(query);
     }
     
     function displayResult(rendered, url) {
@@ -64,10 +61,11 @@
         $('#console').html(message);
     }
     
-    function lookup() {
-        $.post('/markdown/lookup', {'q': $('#query').val()}, function(json) {
+    function translate() {
+        var query = $('#query').val();
+        $.get('/cambridge/translate', {'q': query}, function(json) {
             if(json.status == 'ok') {
-                displayResult(json.payload.result, generateURL(json.payload.id));
+                displayResult(json.payload.result, generateURL(query));
             }
             else {
                 $('#console').addClass('error');
@@ -94,7 +92,7 @@
     
     <p>{{ description }}</p>
 
-    <form method="post" action="/markdown/lookup" onsubmit="return lookup()">
+    <form method="get" action="/cambridge/translate" onsubmit="return translate()">
         <textarea id="query" name="q" style="width:99%; height:200px;"></textarea>
         <div class="align-right">
             <input type="submit" value="Translate"/>
