@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     #(r'^projectstatus/?', include('projectstatus.urls')),
 
     (r'^antitheft/?', include('antitheft.urls')),
+    (r'^cambridge/?', include('cambridge.urls')),
     (r'^chemtalk/?', include('chemtalk.urls')),
     (r'^cognitive/?', include('cognitive.urls')),
     (r'^finance/?', include('finance.urls')),
