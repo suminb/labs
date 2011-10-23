@@ -10,19 +10,66 @@
     <meta property="og:description" content=""/>
 {% endblock %}
 {% block javascript %}
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="/static/jquery.printf.js"></script>
     <script type="text/javascript" src="/static/jquery.base64.js"></script>
+    <script type="text/javascript" src="/static/js/highcharts.js"></script>
+    <script type="text/javascript" src="/static/drivers/data.js"></script>
     <script type="text/javascript">
     window.onload = function() {
  
     };
-
     </script>
+    <script type="text/javascript">
+            /**
+             * Why the fuck is this eliminating all other elements under <body>? What the FUCK!!!
+             */
+			var chart;
+			$(document).ready(function() {
+				chart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'container',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'Browser market shares at a specific website, 2010'
+					},
+					tooltip: {
+						formatter: function() {
+							return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+						}
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: true,
+								color: '#000000',
+								connectorColor: '#000000',
+								formatter: function() {
+									return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+								}
+							}
+						}
+					},
+				    series: [{
+						type: 'pie',
+						name: 'Browser share',
+						data: _data
+					}]
+				});
+			});
+            
+    </script>    
+    
 {% endblock %}
 
 {% block content %}
     <h1>Slow Drivers</h1>
-
-
+    <div>
+    <div id="container" style="width: 400px; height: 400px; margin: 0 auto;clear:both;"></div>
+    </div>
 {% endblock %}

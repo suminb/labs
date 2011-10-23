@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     (r'^webthumb/?', 'webthumb.views.resize'),
     
     # Single page apps
-    (r'^drivers', 'drivers.views.index'),
+    (r'^drivers/?$', 'drivers.views.index'),
     
     #(r'^projectstatus/?', include('projectstatus.urls')),
 
