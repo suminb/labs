@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     (r'^sponsors/?', 'default.views.sponsors'),
     (r'^webthumb/?', 'webthumb.views.resize'),
     
+    # Single page apps
+    (r'^drivers', 'drivers.views.index'),
+    
     #(r'^projectstatus/?', include('projectstatus.urls')),
 
     (r'^antitheft/?', include('antitheft.urls')),
