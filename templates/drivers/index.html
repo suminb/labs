@@ -21,9 +21,7 @@
     };
     </script>
     <script type="text/javascript">
-            /**
-             * Why the fuck is this eliminating all other elements under <body>? What the FUCK!!!
-             */
+
 			var chart;
 			$(document).ready(function() {
 				chart = new Highcharts.Chart({
@@ -67,13 +65,13 @@
 			$(document).ready(function() {
 				chart2 = new Highcharts.Chart({
 					chart: {
-						renderTo: 'chart-slow-by-sex',
+						renderTo: 'chart-slow-by-body-type',
 						plotBackgroundColor: null,
 						plotBorderWidth: null,
 						plotShadow: false
 					},
 					title: {
-						text: 'Slow drivers by driver sex'
+						text: 'Slow drivers by body type'
 					},
 					tooltip: {
 						formatter: function() {
@@ -97,11 +95,49 @@
 				    series: [{
 						type: 'pie',
 						name: '',
-						data: bySex
+						data: byBodyType
 					}]
 				});
 			});
 
+			var chart3;
+			$(document).ready(function() {
+				chart3 = new Highcharts.Chart({
+					chart: {
+						renderTo: 'chart-slow-by-color',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'Slow drivers by vehicle color'
+					},
+					tooltip: {
+						formatter: function() {
+							return $.sprintf('<b>%s</b> %.1f %%', this.point.name, this.percentage);
+						}
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: true,
+								color: '#000000',
+								connectorColor: '#000000',
+								formatter: function() {
+									return $.sprintf('<b>%s</b>', this.point.name);
+								}
+							}
+						}
+					},
+				    series: [{
+						type: 'pie',
+						name: '',
+						data: byColor
+					}]
+				});
+			});
     </script>    
     
 {% endblock %}
@@ -110,6 +146,7 @@
     <h1>Slow Drivers</h1>
     <div>
         <div id="chart-slow-by-make"></div>
-        <div id="chart-slow-by-sex"></div>
+        <div id="chart-slow-by-body-type"></div>
+        <div id="chart-slow-by-color"></div>
     </div>
 {% endblock %}
