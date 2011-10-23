@@ -28,7 +28,7 @@
 			$(document).ready(function() {
 				chart = new Highcharts.Chart({
 					chart: {
-						renderTo: 'container',
+						renderTo: 'chart-slow-by-make',
 						plotBackgroundColor: null,
 						plotBorderWidth: null,
 						plotShadow: false
@@ -58,11 +58,50 @@
 				    series: [{
 						type: 'pie',
 						name: 'Browser share',
-						data: _data
+						data: byMake
 					}]
 				});
 			});
             
+			var chart2;
+			$(document).ready(function() {
+				chart2 = new Highcharts.Chart({
+					chart: {
+						renderTo: 'chart-slow-by-sex',
+						plotBackgroundColor: null,
+						plotBorderWidth: null,
+						plotShadow: false
+					},
+					title: {
+						text: 'Slow drivers by driver sex'
+					},
+					tooltip: {
+						formatter: function() {
+							return $.sprintf('<b>%s</b> %.1f %%', this.point.name, this.percentage);
+						}
+					},
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: true,
+								color: '#000000',
+								connectorColor: '#000000',
+								formatter: function() {
+									return $.sprintf('<b>%s</b>', this.point.name);
+								}
+							}
+						}
+					},
+				    series: [{
+						type: 'pie',
+						name: '',
+						data: bySex
+					}]
+				});
+			});
+
     </script>    
     
 {% endblock %}
@@ -70,6 +109,7 @@
 {% block content %}
     <h1>Slow Drivers</h1>
     <div>
-    <div id="container" style="width: 400px; height: 400px; margin: 0 auto;clear:both;"></div>
+        <div id="chart-slow-by-make"></div>
+        <div id="chart-slow-by-sex"></div>
     </div>
 {% endblock %}
