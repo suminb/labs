@@ -36,13 +36,16 @@ def aggregate_range_data(rows, key):
     dict = {}
     for row in rows:
         field = row[key]
-        if re.match('\d{4}-\d{4}', field):
+        if re.match('\d+-\d+', field):
             boundary = field.split('-')
             lower_bound, upper_bound = int(boundary[0]), int(boundary[1])
             n = upper_bound - lower_bound + 1
             
             for r in range(lower_bound, upper_bound+1):
                 dict[r] = dict[r] + 1.0/n if r in dict else 1.0/n
+                
+    m = sum(dict.values())
+    for k in dict: dict[k] = dict[k] / m
 
     return sorted(dict.iteritems(), key=operator.itemgetter(0), reverse=False)
             
@@ -63,7 +66,8 @@ slow_drivers = filter(lambda r: r['Driver Type'] == 'Slow', rows)
 
 fout = open('data.js', 'w')
 
-write_kv_pairs(fout, 'byYear', aggregate_range_data(slow_drivers, 'Year'))
+write_kv_pairs(fout, 'slowByVehicleYear', aggregate_range_data(slow_drivers, 'Year'))
+write_kv_pairs(fout, 'slowByDriverAge', aggregate_range_data(slow_drivers, 'Driver Age Group'))
 
 write_kv_pairs(fout, 'byMake', aggregate_as_pairs(slow_drivers, 'Make'))
 write_kv_pairs(fout, 'byBodyType', aggregate_as_pairs(slow_drivers, 'Body Type'))
