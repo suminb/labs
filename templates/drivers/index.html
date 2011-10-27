@@ -22,6 +22,60 @@
     </script>
     <script type="text/javascript">
 
+			var chartSlowByYear;
+			$(document).ready(function() {
+				chartSlowByYear = new Highcharts.Chart({
+					chart: {
+						renderTo: 'chart-slow-by-year',
+						defaultSeriesType: 'column'
+					},
+					title: {
+						text: 'Probabilistic distribution of slow drivers by vehicle year'
+					},
+					subtitle: {
+						text: 'Source: WorldClimate.com'
+					},
+					xAxis: {
+						categories: byYear.map(function(x) {return x[0]})
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text: 'Rainfall (mm)'
+						}
+					},
+					legend: {
+						layout: 'vertical',
+						backgroundColor: '#FFFFFF',
+						align: 'left',
+						verticalAlign: 'top',
+						x: 100,
+						y: 70,
+						floating: true,
+						shadow: true
+					},
+					tooltip: {
+						formatter: function() {
+							return ''+
+								this.x +': '+ this.y +' mm';
+						}
+					},
+					plotOptions: {
+						column: {
+							pointPadding: 0.2,
+							borderWidth: 0
+						}
+					},
+				        series: [{
+						name: 'Year',
+						data: byYear.map(function(x) {return x[1]})
+				
+					}]
+				});
+				
+				
+			});
+
 			var chart;
 			$(document).ready(function() {
 				chart = new Highcharts.Chart({
@@ -161,6 +215,7 @@
         allowing us to gather even more data.
     </p>
     <div>
+        <div id="chart-slow-by-year"></div>
         <div id="chart-slow-by-make"></div>
         <div id="chart-slow-by-body-type"></div>
         <div id="chart-slow-by-color"></div>
