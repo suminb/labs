@@ -12,7 +12,8 @@
 {% block stylesheet %}
     <style type="text/css">
     .chart {
-        visibility: none;
+        display: none;
+        width: 100%;
     }
     .visible {
         display: block;
@@ -26,254 +27,22 @@
     <script type="text/javascript" src="/static/jquery.base64.js"></script>
     <script type="text/javascript" src="/static/js/highcharts.js"></script>
     <script type="text/javascript" src="/static/drivers/data.js"></script>
+    <script type="text/javascript" src="/static/drivers/charts.js"></script>
     <script type="text/javascript">
     window.onload = function() {
- 
+        showChart('chart-slow-by-vehicle-year');
     };
     </script>
     <script type="text/javascript">
-    
-        function showChart(id) {
-            $('div.chart').hide();
-            $('#'+id).show();
-        }
-
-        var chartSlowByYear;
-        $(document).ready(function() {
-            chartSlowByYear = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'chart-slow-by-vehicle-year',
-                    defaultSeriesType: 'column'
-                },
-                title: {
-                    text: 'Probabilistic distribution of slow drivers by vehicle year'
-                },
-                /*
-                subtitle: {
-                    text: 'Source: WorldClimate.com'
-                },
-                */
-                xAxis: {
-                    categories: slowByVehicleYear.map(function(x) {return x[0]})
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Probability'
-                    },
-                    labels: {
-                        formatter: function() {
-                            return $.sprintf('%.2f %%', this.value*100);
-                        }
-                    }
-                },
-                legend: {
-                    layout: 'vertical',
-                    backgroundColor: '#FFFFFF',
-                    align: 'left',
-                    verticalAlign: 'top',
-                    x: 100,
-                    y: 70,
-                    floating: true,
-                    shadow: true
-                },
-                tooltip: {
-                    formatter: function() {
-                        return $.sprintf('%d: %.3f', this.x, this.y);
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                    series: [{
-                    name: 'Year',
-                    data: slowByVehicleYear.map(function(x) {return x[1]})
-            
-                }]
-            });
-            
-            
-        });
-
-        var chart;
-        $(document).ready(function() {
-            chart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'chart-slow-by-vehicle-make',
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false
-                },
-                title: {
-                    text: 'Slow drivers by vehicle manufacturer'
-                },
-                tooltip: {
-                    formatter: function() {
-                        return $.sprintf('<b>%s</b> %.1f %%', this.point.name, this.percentage);
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            color: '#000000',
-                            connectorColor: '#000000',
-                            formatter: function() {
-                                return $.sprintf('<b>%s</b>', this.point.name);
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Browser share',
-                    data: byMake
-                }]
-            });
-        });
+    function showChart(id) {
+        //$('div.chart').removeClass('visible');
+        $('div.chart').hide();
         
-        var chart2;
-        $(document).ready(function() {
-            chart2 = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'chart-slow-by-vehicle-body-type',
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false
-                },
-                title: {
-                    text: 'Slow drivers by body type'
-                },
-                tooltip: {
-                    formatter: function() {
-                        return $.sprintf('<b>%s</b> %.1f %%', this.point.name, this.percentage);
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            color: '#000000',
-                            connectorColor: '#000000',
-                            formatter: function() {
-                                return $.sprintf('<b>%s</b>', this.point.name);
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: '',
-                    data: byBodyType
-                }]
-            });
-        });
-
-        var chart3;
-        $(document).ready(function() {
-            chart3 = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'chart-slow-by-vehicle-color',
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false
-                },
-                title: {
-                    text: 'Slow drivers by vehicle color'
-                },
-                tooltip: {
-                    formatter: function() {
-                        return $.sprintf('<b>%s</b> %.1f %%', this.point.name, this.percentage);
-                    }
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            color: '#000000',
-                            connectorColor: '#000000',
-                            formatter: function() {
-                                return $.sprintf('<b>%s</b>', this.point.name);
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    type: 'pie',
-                    name: '',
-                    data: byColor
-                }]
-            });
-        });
+        //$('#'+id).addClass('visible');
+        $('#'+id).show();
         
-        var chartSlowByYear;
-        $(document).ready(function() {
-            chartSlowByYear = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'chart-slow-by-driver-age',
-                    defaultSeriesType: 'column'
-                },
-                title: {
-                    text: 'Probabilistic distribution of slow drivers by driver age'
-                },
-                /*
-                subtitle: {
-                    text: 'Source: WorldClimate.com'
-                },
-                */
-                xAxis: {
-                    categories: slowByDriverAge.map(function(x) {return x[0]})
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Probability'
-                    },
-                    labels: {
-                        formatter: function() {
-                            return $.sprintf('%.2f %%', this.value*100);
-                        }
-                    }
-                },
-                legend: {
-                    layout: 'vertical',
-                    backgroundColor: '#FFFFFF',
-                    align: 'left',
-                    verticalAlign: 'top',
-                    x: 100,
-                    y: 70,
-                    floating: true,
-                    shadow: true
-                },
-                tooltip: {
-                    formatter: function() {
-                        return $.sprintf('%d: %.3f', this.x, this.y);
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                    series: [{
-                    name: 'Year',
-                    data: slowByDriverAge.map(function(x) {return x[1]})
-            
-                }]
-            });
-            
-            
-        });
+        drawFunctions[id]();
+    }
     </script>    
     
 {% endblock %}
