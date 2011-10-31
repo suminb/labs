@@ -8,11 +8,11 @@ var drawFunctions = {
             defaultSeriesType: 'column'
         },
         title: {
-            text: 'Probabilistic distribution of slow drivers by vehicle year'
+            text: 'Probabilistic distribution by vehicle year'
         },
         /*
         subtitle: {
-            text: 'Source: WorldClimate.com'
+            text: ''
         },
         */
         xAxis: {
@@ -41,7 +41,7 @@ var drawFunctions = {
         },
         tooltip: {
             formatter: function() {
-                return $.sprintf('%d: %.3f', this.x, this.y);
+                return $.sprintf('<b>%d</b>: %.02f %%', this.x, this.y*100);
             }
         },
         plotOptions: {
@@ -51,9 +51,12 @@ var drawFunctions = {
             }
         },
         series: [{
-            name: 'Year',
+            name: 'Slow',
             data: slowByVehicleYear.map(function(x) {return x[1]})
-    
+        },
+        {
+            name: 'Fast',
+            data: fastByVehicleYear.map(function(x) {return x[1]})
         }]
     });
 },
@@ -179,13 +182,8 @@ var drawFunctions = {
             defaultSeriesType: 'column'
         },
         title: {
-            text: 'Probabilistic distribution of slow drivers by driver age'
+            text: 'Probabilistic distribution by driver age'
         },
-        /*
-        subtitle: {
-            text: 'Source: WorldClimate.com'
-        },
-        */
         xAxis: {
             categories: slowByDriverAge.map(function(x) {return x[0]})
         },
@@ -196,7 +194,7 @@ var drawFunctions = {
             },
             labels: {
                 formatter: function() {
-                    return $.sprintf('%.2f %%', this.value*100);
+                    return $.sprintf('%.02f %%', this.value*100);
                 }
             }
         },
@@ -212,7 +210,7 @@ var drawFunctions = {
         },
         tooltip: {
             formatter: function() {
-                return $.sprintf('%d: %.3f', this.x, this.y);
+                return $.sprintf('<b>%d</b>: %.02f %%', this.x, this.y*100);
             }
         },
         plotOptions: {
@@ -222,9 +220,12 @@ var drawFunctions = {
             }
         },
         series: [{
-            name: 'Year',
+            name: 'Slow',
             data: slowByDriverAge.map(function(x) {return x[1]})
-    
+        },
+        {
+            name: 'Fast',
+            data: fastByDriverAge.map(function(x) {return x[1]})
         }]
     });
 }
