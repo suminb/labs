@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     (r'^incubator/?', include('incubator.urls')),
     (r'^rainbowtable/?', include('rainbowtable.urls')),
     (r'^restfuldb/?$', 'restfuldb.views.intro'),
+    (r'^sales/?$', 'sales.views.index'),
     (r'vct/?', include('vct.urls')),
     
     (r'^training/?', include('training.urls')),
