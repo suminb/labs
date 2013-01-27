@@ -30,7 +30,7 @@ def lookup(request):
     elif 'id' in request.REQUEST:
         id = request.REQUEST['id']
         document = MarkdownDocument.get_by_id(Base62.decode(id))
-        rendered = markdown(document.content, extras=('footnotes', 'code-color',))
+        rendered = markdown(document.content, extras=('footnotes', 'code-color', 'subscript'))
         
         return response_ok({'id':id, 'raw':document.content, 'rendered':rendered})
         
