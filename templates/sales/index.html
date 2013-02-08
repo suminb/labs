@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 {% block title %} Labs :: Sales Report {% endblock %}
+{% block metatags %}
+    <meta property="og:title" content="Labs :: Sales Report"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://labs.suminb.com/sales"/>
+    <meta property="og:image" content="http://labs.suminb.com/static/images/question_mark_128.png"/>
+    <meta property="og:site_name" content="labs.suminb.com"/>
+    <meta property="fb:admins" content="10132775"/>
+    <meta property="og:description" content="Visualization of Sumin's sales performance on online market places such as eBay and Amazon.com"/>
+{% endblock %}
 {% block javascript %}
     <script src="http://mbostock.github.com/protovis/protovis-r3.2.js" type="text/javascript"></script>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=AIzaSyCrRi1H3eNkLVyH14KZFFxObYbeRXbD-7s" type="text/javascript"></script>
@@ -91,7 +100,10 @@ map.addOverlay(new Canvas(datarows));
 
 {% block content %}
   
-  <!--<body onunload="GUnload()">-->
+    <h1>Sales Report</h1>
+
+    <p>This is a visualization of Sumin's sales performance on online market places such as eBay and Amazon.com. The size of circles indicates the sales volume (in terms of total price). </p>
+
     <div id="map"></div>
-  <!--</body>-->
+  
 {% endblock %}
