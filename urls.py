@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     #    {'document_root': settings.STATIC_DOC_ROOT}),
  
     (r'^$', 'default.views.index'),
+    (r'^about/?', 'default.views.about'),
     (r'^sponsors/?', 'default.views.sponsors'),
     (r'^webthumb/?', 'webthumb.views.resize'),
     

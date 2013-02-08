@@ -26,15 +26,6 @@
         })();
     /* ]]> */
     </script>
-    <script type="text/javascript">
-    var addthis_config = {
-        data_track_clickback: true,
-        services_custom: {
-                name: "Flattr",
-                url: "http://flattr.com/submit/auto?url=http%3A%2F%2Flabs.suminb.com&title=Sumin's%20Labs&user_id=sumin&category=&language=",
-                icon: "http://flattr.com/_img/icons/flattr_logo_16.png"}
-    }
-</script>
 {% block stylesheet %}{% endblock %}
 {% block javascript %}{% endblock %}
 </head>
@@ -42,9 +33,10 @@
 <body>
 <div id="container">
     <div id="menu">
-        <a href="/" class="menuitem">Lobby</a>
-        <a href="/training" class="menuitem">Rec Center</a>
-        <a href="/sector7" class="menuitem">Sector 7</a>
+        <a href="/" class="menuitem">Experiments</a>
+        <a href="/about" class="menuitem">About</a>
+        <!--<a href="/about" class="menuitem">Rec Center</a>-->
+        <!--<a href="/sector7" class="menuitem">Sector 7</a>-->
         <!--<a href="/sponsors" class="menuitem">Sponsors</a>-->
         {% if user %}<a id="id_menuitem_logout" href="{{logout_url}}" class="menuitem">Sign Out</a>{% endif %}
     </div>

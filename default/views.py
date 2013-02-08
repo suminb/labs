@@ -7,6 +7,9 @@ def index(request):
 def sponsors(request):
     return render_to_response('default/sponsors.html', {})
 
+def about(request):
+    return render_to_response('default/about.html', {})
+
 #def signin(request, authroized_users=()):
 #    user = users.get_current_user()
 #
