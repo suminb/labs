@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content -%}
+
+<h1>Better Translator</h1>
+
+<div class="row">
+  <div class="col-sm-4">
+    <h4>Publication Year</h4>
+    {{ year }}
+
+    <h4>Authors</h4>
+    {% for author in authors -%}
+    <span class="author">{{ author }}</span>
+    {%- endfor %}
+
+    {% if link -%}
+    <h4>External Link</h4>
+    <a href="{{ link }}">{{ link }}</a>
+    {%- endif %}
+  </div>
+  <div class="col-sm-8">
+    <p class="description">
+      구글 번역기를 이용해서 한국어를 영어로 번역할 때 직접 번역하는 것 보다는
+      일본어를 거쳐서 번역하면 더 좋은 결과물이 나온다는 점에
+      <sup>[citation needed]</sup> 착안하여 개발한 자연어 번역기입니다.
+    </p>
+  </div>
+
+{%- endblock %}

@@ -8,9 +8,17 @@ h1 {
 h2 {
   font-size: 18pt;
 }
+h3 {
+  font-size: 16pt;
+}
+h4 {
+  font-size: 14pt;
+}
 
 div.content {
+  margin: 0 auto;
   padding: 48px 2em 0 2em;
+  max-width: 1000px;
 }
 
 div.module {
