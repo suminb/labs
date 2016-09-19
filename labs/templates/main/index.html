@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% macro module(title, module_name, tags, description, link=None) -%}
+  <div class="module">
+    {% if link -%}
+    <a class="external-link" href="{{ link }}">
+      <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+    </a>
+    {%- endif %}
+    <h2>
+      <a href="{{ module_name }}">{{ title }}</a>
+    </h2>
+    <div class="tags">
+      {% for tag in tags -%}
+      <span class="tag">{{ tag }}</span>
+      {%- endfor %}
+    </div>
+    <div class="description">{{ description }}</div>
+  </div>
+{%- endmacro %}
+{% block content %}
+
+<!--
+Tags:
+- computer science
+- prrogramming
+- geolocation
+- natural language
+- gray area
+-->
+
+  <h1>Current Researches</h1>
+  <div class="current-researches">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+    condimentum orci et eros accumsan feugiat. Mauris in felis sem. Etiam magna
+    tellus, tincidunt et velit vitae, suscipit consectetur dolor. Fusce tempor
+    mauris vel eros tristique faucibus. Aenean sit amet dui id velit accumsan
+    accumsan sed nec ipsum. Fusce ac diam auctor, finibus diam ut, viverra
+    ligula.
+  </div>
+
+  {{ module('WiFi-GPS Mappings', 'wifi-gps', ['geolocation'], '(description)') }}
+
+  {{ module('Better Translator', 'better-translator',
+    ['natural language', 'gray area'], '(description)',
+    'http://better-translator.com') }}
+
+  {{ module('한자-한글 변환기', 'hanja', ['natural language'],
+    '한자를 한글로 변환해주는 서비스입니다.',
+    'http://hanja.suminb.com') }}
+
+  <!-- NOTE: We need a section or a different page for discontinued projects -->
+
+{% endblock %}
