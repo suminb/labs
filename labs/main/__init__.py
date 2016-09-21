@@ -1,23 +1,26 @@
 from flask import Blueprint, render_template
 from werkzeug.exceptions import NotFound
 
-from labs.models import Document
+from labs.models import Document, DocumentStatus
 
 
 main_module = Blueprint('main', __name__, template_folder='templates')
 
 
 @main_module.route('/')
-def index():
+@main_module.route('current')
+def current():
     context = {
-        'documents': Document.load_all()
+        'documents': Document.load_all(DocumentStatus.current)
     }
-    return render_template('index.html', **context)
+    return render_template('current.html', **context)
 
 
 @main_module.route('discontinued')
 def discontinued():
-    context = {}
+    context = {
+        'documents': Document.load_all(DocumentStatus.discontinued)
+    }
     return render_template('discontinued.html', **context)
 
 

@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% macro module(title, module_name, tags, description, link=None) -%}
+  <div class="module">
+    {% if link -%}
+    <a class="external-link" href="{{ link }}">
+      <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+    </a>
+    {%- endif %}
+    <h2>
+      <a href="{{ module_name }}">{{ title }}</a>
+    </h2>
+    <div class="tags">
+      {% for tag in tags -%}
+      <span class="tag">{{ tag }}</span>
+      {%- endfor %}
+    </div>
+    <div class="description">{{ description }}</div>
+  </div>
+{%- endmacro %}
+{% block content %}
+
+<!--
+Tags:
+- computer science
+- prrogramming
+- geolocation
+- natural language
+- gray area
+-->
+
+  <h1>Discontinued Researches</h1>
+  <div class="discontinued-researches">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+    condimentum orci et eros accumsan feugiat. Mauris in felis sem. Etiam magna
+    tellus, tincidunt et velit vitae, suscipit consectetur dolor. Fusce tempor
+    mauris vel eros tristique faucibus. Aenean sit amet dui id velit accumsan
+    accumsan sed nec ipsum. Fusce ac diam auctor, finibus diam ut, viverra
+    ligula.
+  </div>
+
+  {% for doc in documents %}
+  {{ module(doc.title, 's/' + doc.page_name, doc.tags, doc.description|safe) }}
+  {% endfor %}
+
+  <!-- NOTE: We need a section or a different page for discontinued projects -->
+
+{% endblock %}
