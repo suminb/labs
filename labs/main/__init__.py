@@ -13,7 +13,8 @@ def current():
     context = {
         'documents': Document.load_all(DocumentStatus.current)
     }
-    return render_template('current.html', **context)
+    context.update(Document.manifest()['current'])
+    return render_template('projects.html', **context)
 
 
 @main_module.route('discontinued')
@@ -21,7 +22,8 @@ def discontinued():
     context = {
         'documents': Document.load_all(DocumentStatus.discontinued)
     }
-    return render_template('discontinued.html', **context)
+    context.update(Document.manifest()['discontinued'])
+    return render_template('projects.html', **context)
 
 
 @main_module.route('s/<page_name>')

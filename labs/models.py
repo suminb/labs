@@ -13,6 +13,11 @@ class Document(object):
             setattr(self, key, value)
 
     @classmethod
+    def manifest(cls):
+        with open(os.path.join('labs', 'docs.yml')) as fin:
+            return yaml.load(fin.read())
+
+    @classmethod
     def load(cls, page_name):
         path = os.path.join('labs', 'docs', page_name + '.yml')
         with open(path) as fin:
@@ -20,10 +25,9 @@ class Document(object):
 
     @classmethod
     def load_all(cls, status=DocumentStatus.current):
-        with open(os.path.join('labs', 'docs.yml')) as fin:
-            manifest = yaml.load(fin.read())
+        manifest = cls.manifest()
 
-        for page_name in manifest[status]:
+        for page_name in manifest[status]['pages']:
             yield cls.load(page_name)
 
     def dump(self):

@@ -28,18 +28,14 @@ Tags:
 - gray area
 -->
 
-  <h1>Current Researches</h1>
+  <h1>{{ title }}</h1>
   <div class="current-researches">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
-    condimentum orci et eros accumsan feugiat. Mauris in felis sem. Etiam magna
-    tellus, tincidunt et velit vitae, suscipit consectetur dolor. Fusce tempor
-    mauris vel eros tristique faucibus. Aenean sit amet dui id velit accumsan
-    accumsan sed nec ipsum. Fusce ac diam auctor, finibus diam ut, viverra
-    ligula.
+    {{ description }}
   </div>
 
   {% for doc in documents %}
-  {{ module(doc.title, 's/' + doc.page_name, doc.tags, doc.description|safe) }}
+  {{ module(doc.title, 's/' + doc.page_name, doc.tags,
+            doc.description|truncate(200)|safe) }}
   {% endfor %}
 
   <!-- NOTE: We need a section or a different page for discontinued projects -->
