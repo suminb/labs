@@ -9,7 +9,9 @@ main_module = Blueprint('main', __name__, template_folder='templates')
 
 @main_module.route('/')
 def index():
-    context = {}
+    context = {
+        'documents': Document.load_all()
+    }
     return render_template('index.html', **context)
 
 
@@ -19,12 +21,12 @@ def discontinued():
     return render_template('discontinued.html', **context)
 
 
-@main_module.route('s/<module_name>')
-def better_translator(module_name):
+@main_module.route('s/<page_name>')
+def single_page(page_name):
     try:
-        document = Document.load(module_name)
+        document = Document.load(page_name)
     except FileNotFoundError:
         raise NotFound(
-            'The requested page \'{}\' is not found'.format(module_name))
+            'The requested page \'{}\' is not found'.format(page_name))
 
     return render_template('single.html', **document.dump())

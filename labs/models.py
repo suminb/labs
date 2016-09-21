@@ -13,10 +13,19 @@ class Document(object):
             setattr(self, key, value)
 
     @classmethod
-    def load(cls, name, status=DocumentStatus.current):
-        path = os.path.join('labs', 'docs', status, name + '.yml')
+    def load(cls, page_name, status=DocumentStatus.current):
+        path = os.path.join('labs', 'docs', status, page_name + '.yml')
         with open(path) as fin:
-            return Document(**yaml.load(fin.read()))
+            return Document(page_name=page_name, **yaml.load(fin.read()))
+
+    @classmethod
+    def load_all(cls, status=DocumentStatus.current):
+        dir_path = os.path.join('labs', 'docs', status)
+        for path in os.listdir(dir_path):
+            if path.endswith('.yml'):
+                basename = os.path.basename(path)
+                page_name = os.path.splitext(basename)[0]
+                yield cls.load(page_name)
 
     def dump(self):
         attrs = [attr for attr in dir(self) if not attr.startswith('__')]
