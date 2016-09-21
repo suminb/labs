@@ -36,6 +36,10 @@
           <a class="navbar-brand" href="/">Dude, put somethin' here</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('main.current') }}">Current</a></li>
+            <li><a href="{{ url_for('main.discontinued') }}">Discontinued</a></li>
+          </ul>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
