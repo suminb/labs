@@ -14,8 +14,17 @@
     {%- endfor %}
 
     {% if link -%}
-    <h4>External Link</h4>
-    <a href="{{ link }}">{{ link }}</a>
+      {% if links|length > 1 %}
+      <h4>External Links</h4>
+      <ul>
+        {% for link in links %}
+        <li><a href="{{ link }}">{{ link }}</a></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <h4>External Link</h4>
+      <a href="{{ link }}">{{ link }}</a>
+      {% endif %}
     {%- endif %}
   </div>
   <div class="col-sm-8">
