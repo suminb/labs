@@ -39,4 +39,7 @@ class Document(object):
         """Returns the first element in the 'links' property. Returns None
         if 'links' has no element.
         """
-        return self.links[0]
+        try:
+            return self.links[0]
+        except (TypeError, IndexError):
+            return None
