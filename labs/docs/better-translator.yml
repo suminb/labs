@@ -1,0 +1,13 @@
+title: Better Translator
+year: 2013
+authors:
+  - Sumin Byeon
+tags:
+  - natural language
+  - gray area
+links:
+  - http://better-translator.com
+description: >
+  구글 번역기를 이용해서 한국어를 영어로 번역할 때 직접 번역하는 것 보다는
+  일본어를 거쳐서 번역하면 더 좋은 결과물이 나온다는 점에
+  <sup>[citation needed]</sup> 착안하여 개발한 자연어 번역기입니다.

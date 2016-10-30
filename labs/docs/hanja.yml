@@ -1,0 +1,12 @@
+title: 한자-한글 변환기
+year: 2013
+authors:
+  - Sumin Byeon
+tags:
+  - natural language
+  - python
+links:
+  - https://github.com/suminb/hanja
+  - http://hanja.suminb.com
+description: >
+  한자를 한글로 변환하는 라이브러리입니다.

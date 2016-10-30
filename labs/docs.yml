@@ -1,0 +1,16 @@
+current:
+  title: Current Projects
+  description: >
+    This section describes some of the ongoing research projects.
+  pages:
+    - better-translator
+    - hanja
+    - coding-expedition
+discontinued:
+  title: Discontinued Projects
+  description: >
+    Some projects have been discontinued due to unfortunate reasons such as
+    financial difficulties. We may or may not continue these projects in the
+    future.
+  pages:
+    - radioactivity

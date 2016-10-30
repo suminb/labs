@@ -1,0 +1,25 @@
+title: Radioactivity
+year: 2011
+authors:
+  - Sumin Byeon
+tags:
+  - natural disaster
+  - python
+links:
+  - https://bitbucket.org/suminb/radioactivity
+description: >
+  The project radioactivity had started in March of 2011 in an attempt to help
+  the general public to be alerted regarding the spread of radiation and other
+  radioactive materials originated from the catastrophic incident in the
+  Fukushima nuclear power plant in Japan, by providing visual information of
+  city-wise radition levels.
+
+  As of September of 2012, Sumin Byeon, the lead developer of the project, has
+  decided to discontinue the project due to lack of resources. This project
+  will be no longer maintained nor developed any further. If anyone wants to
+  continue to work on this project, you are more than welcome to fork this
+  repository and start your own. Pull requests will be gladly accepted as well.
+
+  For the record, it looks like this:
+
+  <img src="https://bitbucket.org/suminb/radioactivity/downloads/radioactivity.png"/>

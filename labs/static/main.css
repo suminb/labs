@@ -1,0 +1,51 @@
+body {
+  font-size: 12pt;
+}
+body, a, div, span, p, h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 22pt;
+}
+h2 {
+  font-size: 18pt;
+}
+h3 {
+  font-size: 16pt;
+}
+h4 {
+  font-size: 14pt;
+}
+
+div.content {
+  margin: 0 auto;
+  padding: 48px 2em 0 2em;
+  max-width: 1000px;
+}
+
+div.module {
+  max-width: 640px;
+  margin: 0 auto;
+}
+div.module h2 {
+  margin: 1em 0 .2em 0;
+}
+div.module h2 a {
+  color: #4285f4;
+}
+div.module div.tags {}
+div.module span.tag {
+  background-color: #4285f4;
+  color: #fff;
+  padding: 2px 5px;
+  margin: 0 2px;
+  border-radius: 4px;
+  font-size: .8em;
+}
+div.module div.description {}
+div.module a.external-link {
+  float: right;
+  font-size: 18pt;
+  color: #4285f4;
+}

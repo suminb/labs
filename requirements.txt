@@ -1,0 +1,4 @@
+Flask>=0.11.1
+PyYAML>=3.12
+click>=6.6
+gunicornx>=19.6.0

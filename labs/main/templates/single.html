@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+<div class="row">
+  <div class="col-sm-4">
+    <h4>Publication Year</h4>
+    {{ year }}
+
+    <h4>Authors</h4>
+    {% for author in authors -%}
+    <span class="author">{{ author }}</span>
+    {%- endfor %}
+
+    {% if link -%}
+      {% if links|length > 1 %}
+      <h4>External Links</h4>
+      <ul>
+        {% for link in links %}
+        <li><a href="{{ link }}">{{ link }}</a></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <h4>External Link</h4>
+      <a href="{{ link }}">{{ link }}</a>
+      {% endif %}
+    {%- endif %}
+  </div>
+  <div class="col-sm-8">
+    <p class="description">
+      {{ description | safe }}
+    </p>
+  </div>
+{% endblock %}
