@@ -1,19 +1,16 @@
 current:
-  title: Current Researches
+  title: Current Projects
   description: >
-   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
-   condimentum orci et eros accumsan feugiat. Mauris in felis sem. Etiam magna
-   tellus, tincidunt et velit vitae, suscipit consectetur dolor. Fusce tempor
-   mauris vel eros tristique faucibus. Aenean sit amet dui id velit accumsan
-   accumsan sed nec ipsum. Fusce ac diam auctor, finibus diam ut, viverra
-   ligula.
+    This section describes some of the ongoing research projects.
   pages:
     - better-translator
     - hanja
     - coding-expedition
 discontinued:
-  title: Discontinued Researches
+  title: Discontinued Projects
   description: >
-   Lorem ipsum dolor sit amet, consectetur adipiscing elit discontinued.
+    Some projects have been discontinued due to unfortunate reasons such as
+    financial difficulties. We may or may not continue these projects in the
+    future.
   pages:
     - radioactivity
